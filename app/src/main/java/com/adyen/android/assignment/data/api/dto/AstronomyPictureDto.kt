@@ -1,9 +1,9 @@
-package com.adyen.android.assignment.api.model
+package com.adyen.android.assignment.data.api.dto
 
 import com.squareup.moshi.Json
 import java.time.LocalDate
 
-data class AstronomyPicture(
+data class AstronomyPictureDto(
     @Json(name = "service_version") val serviceVersion: String,
     val title: String,
     val explanation: String,

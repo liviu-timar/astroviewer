@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.api.model
+package com.adyen.android.assignment.data.api.adapters
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.ToJson
