@@ -6,6 +6,7 @@ buildscript {
         kotlinVersion = "1.6.21"
         hiltVersion = "2.40.5"
         hiltViewModelVersion = "1.0.0-alpha03"
+        coroutinesVersion = '1.6.1'
     }
 
     repositories {
