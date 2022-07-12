@@ -3,10 +3,13 @@
 buildscript {
     ext {
         gradleBuildVersion = '7.2.1'
-        kotlinVersion = "1.6.21"
-        hiltVersion = "2.40.5"
-        hiltViewModelVersion = "1.0.0-alpha03"
+        kotlinVersion = '1.6.21'
+        hiltVersion = '2.40.5'
+        hiltViewModelVersion = '1.0.0-alpha03'
         coroutinesVersion = '1.6.1'
+        mockitoVersion = '3.7.7'
+        mockitoInlineVersion = '4.5.1'
+        mockitoKotlinVersion = '4.0.0'
     }
 
     repositories {
