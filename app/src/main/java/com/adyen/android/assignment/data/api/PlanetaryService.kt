@@ -9,6 +9,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 
 interface PlanetaryService {
@@ -16,8 +17,8 @@ interface PlanetaryService {
      * APOD - Astronomy Picture of the day.
      * See [the docs](https://api.nasa.gov/) and [github micro service](https://github.com/nasa/apod-api#docs-)
      */
-    @GET("planetary/apod?count=20&api_key=${BuildConfig.API_KEY}")
-    suspend fun getPictures(): Response<List<AstronomyPictureDto>>
+    @GET("planetary/apod?api_key=${BuildConfig.API_KEY}")
+    suspend fun getPictures(@Query("count") count: Int = 20): Response<List<AstronomyPictureDto>>
 
     companion object {
 
