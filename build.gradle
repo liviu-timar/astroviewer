@@ -11,6 +11,9 @@ buildscript {
         mockitoInlineVersion = '4.5.1'
         mockitoKotlinVersion = '4.0.0'
         glideVersion = '4.13.0'
+        composeVersion = '1.1.1'
+        composeActivityVersion = '1.5.0'
+        composeCompilerVersion = '1.2.0-rc02'
     }
 
     repositories {
