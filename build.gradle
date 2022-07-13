@@ -10,6 +10,7 @@ buildscript {
         mockitoVersion = '3.7.7'
         mockitoInlineVersion = '4.5.1'
         mockitoKotlinVersion = '4.0.0'
+        glideVersion = '4.13.0'
     }
 
     repositories {
