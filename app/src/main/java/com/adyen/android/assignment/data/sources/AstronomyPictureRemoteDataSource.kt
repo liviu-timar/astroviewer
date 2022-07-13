@@ -13,7 +13,9 @@ class AstronomyPictureRemoteDataSource @Inject constructor(
 
     override suspend fun getPictures(count: Int): List<AstronomyPicture> {
         return planetaryService.getPictures().body()?.let { dtoList ->
-            dtoList.map { dto -> astronomyPictureMapper.map(dto) }
+            dtoList
+                .filter { dto -> dto.mediaType == "image" }
+                .map { dto -> astronomyPictureMapper.map(dto) }
         } ?: emptyList()
     }
 }
