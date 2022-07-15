@@ -24,7 +24,7 @@ import com.adyen.android.assignment.ui.theme.BackgroundPrimary
 fun CustomTopAppBar(
     title: String,
     onBackClick: (() -> Unit)? = null,
-    onReorderClick: (() -> Unit)? = null,
+    onSortClick: (() -> Unit)? = null,
 ) {
     TopAppBar(
         backgroundColor = BackgroundPrimary,
@@ -46,12 +46,12 @@ fun CustomTopAppBar(
                 fontSize = 20.sp,
                 maxLines = 1
             )
-            onReorderClick?.let {
+            onSortClick?.let {
                 ClickableIcon(
                     imageResId = R.drawable.ic_reorder,
                     imageWidth = 25.dp,
                     alignment = Alignment.CenterEnd,
-                    onClick = onReorderClick
+                    onClick = onSortClick
                 )
             }
         }
@@ -91,6 +91,6 @@ fun PreviewCustomTopAppBar() {
     CustomTopAppBar(
         title = stringResource(id = R.string.our_universe),
         onBackClick = {},
-        onReorderClick = {}
+        onSortClick = {}
     )
 }

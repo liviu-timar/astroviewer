@@ -1,6 +1,9 @@
 package com.adyen.android.assignment.ui.picturelist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,6 +32,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.adyen.android.assignment.R
 import com.adyen.android.assignment.domain.models.AstronomyPicture
+import com.adyen.android.assignment.domain.usecases.SortBy
 import com.adyen.android.assignment.ui.theme.BackgroundSecondary
 import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
@@ -41,23 +45,31 @@ import java.time.LocalDate
 
 @Composable
 fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel) {
-    LaunchedEffect(key1 = Unit) { viewModel.getPictureList(count = 15) }
+    val pictureCount = 15
+
+    LaunchedEffect(key1 = Unit) { viewModel.getPictureList(count = pictureCount) }
 
     val pictureList by viewModel.pictures.observeAsState()
-    var showReorderPicturesDialog by remember { mutableStateOf(false) }
+    var showSortPicturesDialog by remember { mutableStateOf(false) }
 
     Column {
         CustomTopAppBar(
             title = stringResource(id = R.string.our_universe),
-            onReorderClick = { showReorderPicturesDialog = true }
+            onSortClick = { showSortPicturesDialog = true }
         )
         PictureList(pictureList = pictureList)
     }
 
-    if (showReorderPicturesDialog) {
-        ReorderPicturesDialog(
-            onDismissClick = { showReorderPicturesDialog = false },
-            onConfirmClick = { /* Reorder picture list */ }
+    if (showSortPicturesDialog) {
+        SortPicturesDialog(
+            onDismissClick = { showSortPicturesDialog = false },
+            onConfirmClick = { sortBy ->
+                viewModel.getPictureList(
+                    count = pictureCount,
+                    sortBy = sortBy
+                )
+                showSortPicturesDialog = false
+            }
         )
     }
 }
@@ -126,22 +138,24 @@ private fun PictureDate(date: LocalDate) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun ReorderPicturesDialog(
-    onDismissClick: () -> Unit,
-    onConfirmClick: () -> Unit
-) {
+private fun SortPicturesDialog(onDismissClick: () -> Unit, onConfirmClick: (SortBy) -> Unit) {
     Dialog(
         onDismissRequest = onDismissClick,
         properties = DialogProperties(
             usePlatformDefaultWidth = false
         )
     ) {
-        DialogContent()
+        DialogContent(
+            onDismissClick = onDismissClick,
+            onConfirmClick = onConfirmClick
+        )
     }
 }
 
 @Composable
-private fun DialogContent() {
+private fun DialogContent(onDismissClick: () -> Unit, onConfirmClick: (SortBy) -> Unit) {
+    var sortPicturesBy by remember { mutableStateOf(SortBy.DATE_DESC) }
+
     Column(
         modifier = Modifier
             .padding(all = 40.dp)
@@ -154,16 +168,25 @@ private fun DialogContent() {
         Spacer(modifier = Modifier.height(20.dp))
         DialogOption(
             label = stringResource(id = R.string.sort_by_title),
-            selected = true
+            selected = sortPicturesBy == SortBy.TITLE_ASC,
+            onClick = { sortPicturesBy = SortBy.TITLE_ASC }
         )
         Spacer(modifier = Modifier.height(15.dp))
         DialogOption(
             label = stringResource(id = R.string.sort_by_date),
-            selected = false
+            selected = sortPicturesBy == SortBy.DATE_DESC,
+            onClick = { sortPicturesBy = SortBy.DATE_DESC }
         )
         Spacer(modifier = Modifier.height(40.dp))
-        DialogButton(isConfirmButton = true)
-        DialogButton(isConfirmButton = false)
+        DialogButton(
+            isConfirmButton = true,
+            onClick = { onConfirmClick(sortPicturesBy) }
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        DialogButton(
+            isConfirmButton = false,
+            onClick = onDismissClick
+        )
     }
 }
 
@@ -176,9 +199,15 @@ private fun DialogTitle() {
 }
 
 @Composable
-private fun DialogOption(label: String, selected: Boolean) {
+private fun DialogOption(label: String, selected: Boolean, onClick: () -> Unit) {
     Row(
-        modifier = Modifier.padding(end = 10.dp),
+        modifier = Modifier
+            .padding(end = 10.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -189,8 +218,13 @@ private fun DialogOption(label: String, selected: Boolean) {
         )
         RadioButton(
             selected = selected,
-            modifier = Modifier.size(20.dp),
-            onClick = {},
+            modifier = Modifier
+                .size(20.dp)
+                .indication(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ),
+            onClick = onClick,
             colors = RadioButtonDefaults.colors(
                 selectedColor = Primary,
                 unselectedColor = Color.White,
@@ -200,9 +234,9 @@ private fun DialogOption(label: String, selected: Boolean) {
 }
 
 @Composable
-private fun DialogButton(isConfirmButton: Boolean) {
+private fun DialogButton(isConfirmButton: Boolean, onClick: () -> Unit) {
     ButtonCustom(
-        onClick = {},
+        onClick = onClick,
         label = if (isConfirmButton) stringResource(id = R.string.apply) else stringResource(id = R.string.cancel),
         backgroundColor = if (isConfirmButton) Primary else BackgroundSecondary
     )
@@ -222,6 +256,6 @@ fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pict
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewReorderDialog() {
-    ReorderPicturesDialog(onDismissClick = {}, onConfirmClick = {})
+fun PreviewSortDialog() {
+    SortPicturesDialog(onDismissClick = {}, onConfirmClick = {})
 }

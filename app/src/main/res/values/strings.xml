@@ -8,8 +8,8 @@
     <string name="go_back">Go Back</string>
     <string name="astronomy_picture">Astronomy Picture</string>
     <string name="sort_pictures">Sort Pictures</string>
-    <string name="sort_by_title">Sort by Title</string>
-    <string name="sort_by_date">Sort by Date</string>
+    <string name="sort_by_title">Sort by Title (Ascending)</string>
+    <string name="sort_by_date">Sort by Date (Newest)</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
 </resources>
