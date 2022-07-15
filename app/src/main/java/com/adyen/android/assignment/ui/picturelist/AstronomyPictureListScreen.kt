@@ -1,17 +1,20 @@
 package com.adyen.android.assignment.ui.picturelist
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.RadioButton
+import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -20,13 +23,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.adyen.android.assignment.R
 import com.adyen.android.assignment.domain.models.AstronomyPicture
+import com.adyen.android.assignment.ui.theme.BackgroundSecondary
+import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
 import com.adyen.android.assignment.ui.utils.PreviewPictureProvider
+import com.adyen.android.assignment.ui.widgets.ButtonCustom
 import com.adyen.android.assignment.ui.widgets.CustomTopAppBar
 import com.adyen.android.assignment.ui.widgets.TextCustom
 import com.adyen.android.assignment.ui.widgets.TextCustomMedium
@@ -37,10 +44,21 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel) {
     LaunchedEffect(key1 = Unit) { viewModel.getPictureList(count = 15) }
 
     val pictureList by viewModel.pictures.observeAsState()
+    var showReorderPicturesDialog by remember { mutableStateOf(false) }
 
     Column {
-        CustomTopAppBar(title = stringResource(id = R.string.our_universe))
+        CustomTopAppBar(
+            title = stringResource(id = R.string.our_universe),
+            onReorderClick = { showReorderPicturesDialog = true }
+        )
         PictureList(pictureList = pictureList)
+    }
+
+    if (showReorderPicturesDialog) {
+        ReorderPicturesDialog(
+            onDismissClick = { showReorderPicturesDialog = false },
+            onConfirmClick = { /* Reorder picture list */ }
+        )
     }
 }
 
@@ -106,6 +124,90 @@ private fun PictureDate(date: LocalDate) {
     )
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun ReorderPicturesDialog(
+    onDismissClick: () -> Unit,
+    onConfirmClick: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismissClick,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
+    ) {
+        DialogContent()
+    }
+}
+
+@Composable
+private fun DialogContent() {
+    Column(
+        modifier = Modifier
+            .padding(all = 40.dp)
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(size = 10.dp))
+            .background(color = BackgroundSecondary)
+            .padding(all = 20.dp)
+    ) {
+        DialogTitle()
+        Spacer(modifier = Modifier.height(20.dp))
+        DialogOption(
+            label = stringResource(id = R.string.sort_by_title),
+            selected = true
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        DialogOption(
+            label = stringResource(id = R.string.sort_by_date),
+            selected = false
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        DialogButton(isConfirmButton = true)
+        DialogButton(isConfirmButton = false)
+    }
+}
+
+@Composable
+private fun DialogTitle() {
+    TextCustomMedium(
+        text = stringResource(R.string.sort_pictures),
+        fontSize = 20.sp
+    )
+}
+
+@Composable
+private fun DialogOption(label: String, selected: Boolean) {
+    Row(
+        modifier = Modifier.padding(end = 10.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        TextCustom(
+            text = label,
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 1
+        )
+        RadioButton(
+            selected = selected,
+            modifier = Modifier.size(20.dp),
+            onClick = {},
+            colors = RadioButtonDefaults.colors(
+                selectedColor = Primary,
+                unselectedColor = Color.White,
+            )
+        )
+    }
+}
+
+@Composable
+private fun DialogButton(isConfirmButton: Boolean) {
+    ButtonCustom(
+        onClick = {},
+        label = if (isConfirmButton) stringResource(id = R.string.apply) else stringResource(id = R.string.cancel),
+        backgroundColor = if (isConfirmButton) Primary else BackgroundSecondary
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: AstronomyPicture) {
@@ -116,4 +218,10 @@ fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: 
 @Composable
 fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<AstronomyPicture>) {
     PictureList(pictureList = pictureList)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewReorderDialog() {
+    ReorderPicturesDialog(onDismissClick = {}, onConfirmClick = {})
 }
