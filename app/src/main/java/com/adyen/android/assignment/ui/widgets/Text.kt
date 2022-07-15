@@ -17,7 +17,7 @@ fun TextCustom(
     fontSize: TextUnit = 16.sp,
     fontStyle: FontStyle = FontStyle.Normal,
     fontWeight: FontWeight = FontWeight.Normal,
-    maxLines: Int = 1
+    maxLines: Int = Int.MAX_VALUE
 ) {
     Text(
         text = text,
@@ -32,18 +32,15 @@ fun TextCustom(
 }
 
 @Composable
-fun TextCustomMedium(text: String, maxLines: Int = 1) {
+fun TextCustomMedium(
+    text: String,
+    fontSize: TextUnit = 16.sp,
+    maxLines: Int = Int.MAX_VALUE,
+) {
     TextCustom(
         text = text,
+        fontSize = fontSize,
         fontWeight = FontWeight.Medium,
         maxLines = maxLines
-    )
-}
-
-@Composable
-fun TextCustomItalic(text: String) {
-    TextCustom(
-        text = text,
-        fontStyle = FontStyle.Italic
     )
 }

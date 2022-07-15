@@ -18,12 +18,16 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.adyen.android.assignment.R
-import com.adyen.android.assignment.ui.theme.BackgroundColor
+import com.adyen.android.assignment.ui.theme.BackgroundPrimary
 
 @Composable
-fun CustomTopAppBar(title: String, onBackClick: (() -> Unit)? = null) {
+fun CustomTopAppBar(
+    title: String,
+    onBackClick: (() -> Unit)? = null,
+    onReorderClick: (() -> Unit)? = null,
+) {
     TopAppBar(
-        backgroundColor = BackgroundColor,
+        backgroundColor = BackgroundPrimary,
         elevation = 0.dp,
         contentPadding = PaddingValues(vertical = 5.dp)
     ) {
@@ -39,14 +43,17 @@ fun CustomTopAppBar(title: String, onBackClick: (() -> Unit)? = null) {
             TextCustom(
                 text = title,
                 modifier = Modifier.align(Alignment.Center),
-                fontSize = 20.sp
+                fontSize = 20.sp,
+                maxLines = 1
             )
-            ClickableIcon(
-                imageResId = R.drawable.ic_reorder,
-                imageWidth = 25.dp,
-                alignment = Alignment.CenterEnd,
-                onClick = {}
-            )
+            onReorderClick?.let {
+                ClickableIcon(
+                    imageResId = R.drawable.ic_reorder,
+                    imageWidth = 25.dp,
+                    alignment = Alignment.CenterEnd,
+                    onClick = onReorderClick
+                )
+            }
         }
     }
 }
@@ -83,6 +90,7 @@ private fun BoxScope.ClickableIcon(
 fun PreviewCustomTopAppBar() {
     CustomTopAppBar(
         title = stringResource(id = R.string.our_universe),
-        onBackClick = {}
+        onBackClick = {},
+        onReorderClick = {}
     )
 }
