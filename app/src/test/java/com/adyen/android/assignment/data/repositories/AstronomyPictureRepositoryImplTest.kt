@@ -2,7 +2,7 @@ package com.adyen.android.assignment.data.repositories
 
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import com.adyen.android.assignment.domain.repositories.AstronomyPictureRepository
-import com.adyen.android.assignment.domain.sources.AstronomyPictureDataSource
+import com.adyen.android.assignment.domain.sources.AstronomyPictureRemoteDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -18,7 +18,7 @@ import java.time.LocalDate
 class AstronomyPictureRepositoryImplTest {
 
     private lateinit var repository: AstronomyPictureRepository
-    private lateinit var mockAstronomyPictureDataSource: AstronomyPictureDataSource
+    private lateinit var mockAstronomyPictureDataSource: AstronomyPictureRemoteDataSource
 
     private val testPictureList = listOf(
         AstronomyPicture(

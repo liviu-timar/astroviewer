@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.data.api
+package com.adyen.android.assignment.data.remote
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

@@ -10,5 +10,5 @@ class GetSortedAstronomyPictureListUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(count: Int, sortBy: SortBy): List<AstronomyPicture> =
-        sortPictureListUseCase(pictureRepository.getPictures(count), sortBy)
+        sortPictureListUseCase(pictureRepository.getPictures(true, count), sortBy)
 }

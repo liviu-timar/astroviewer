@@ -1,6 +1,6 @@
 package com.adyen.android.assignment.data.mappers
 
-import com.adyen.android.assignment.data.api.dto.AstronomyPictureDto
+import com.adyen.android.assignment.data.remote.models.AstronomyPictureDto
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import org.hamcrest.core.IsEqual
 import org.hamcrest.MatcherAssert.assertThat

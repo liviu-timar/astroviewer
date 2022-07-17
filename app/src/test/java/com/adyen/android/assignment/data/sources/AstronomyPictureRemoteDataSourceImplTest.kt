@@ -1,8 +1,7 @@
 package com.adyen.android.assignment.data.sources
 
-import com.adyen.android.assignment.data.api.PlanetaryService
-import com.adyen.android.assignment.data.api.dto.AstronomyPictureDto
-import com.adyen.android.assignment.data.mappers.AstronomyPictureMapper
+import com.adyen.android.assignment.data.remote.PlanetaryService
+import com.adyen.android.assignment.data.remote.models.AstronomyPictureDto
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -16,10 +15,10 @@ import retrofit2.Response
 import java.time.LocalDate
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AstronomyPictureRemoteDataSourceTest {
+class AstronomyPictureRemoteDataSourceImplTest {
 
     // SUT
-    private lateinit var dataSource: AstronomyPictureRemoteDataSource
+    private lateinit var dataSource: AstronomyPictureRemoteDataSourceImpl
     // Dependencies
     private lateinit var mockPlanetaryService: PlanetaryService
     // Test Data
@@ -61,7 +60,7 @@ class AstronomyPictureRemoteDataSourceTest {
     @Before
     fun setUp() {
         mockPlanetaryService = mock()
-        dataSource = AstronomyPictureRemoteDataSource(mockPlanetaryService, AstronomyPictureMapper())
+        dataSource = AstronomyPictureRemoteDataSourceImpl(mockPlanetaryService)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult
