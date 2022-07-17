@@ -49,7 +49,12 @@ import java.time.LocalDate
 fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
     val pictureCount = 15
 
-    LaunchedEffect(key1 = Unit) { viewModel.getPictureList(count = pictureCount) }
+    LaunchedEffect(key1 = Unit) {
+        if (viewModel.isDataFirstLoad) {
+            viewModel.getPictureList(count = pictureCount)
+            viewModel.isDataFirstLoad = false
+        }
+    }
 
     val pictureList by viewModel.pictures.observeAsState()
     var showSortPicturesDialog by remember { mutableStateOf(false) }
