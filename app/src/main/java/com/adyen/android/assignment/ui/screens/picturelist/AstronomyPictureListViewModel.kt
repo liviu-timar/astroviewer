@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.ui.picturelist
+package com.adyen.android.assignment.ui.screens.picturelist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

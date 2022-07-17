@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.ui.picturelist
+package com.adyen.android.assignment.ui.screens.picturelist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -6,7 +6,7 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
@@ -28,11 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.adyen.android.assignment.R
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import com.adyen.android.assignment.domain.usecases.SortBy
+import com.adyen.android.assignment.ui.navigation.PictureRoutes
 import com.adyen.android.assignment.ui.theme.BackgroundSecondary
 import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
@@ -44,7 +46,7 @@ import com.adyen.android.assignment.ui.widgets.TextCustomMedium
 import java.time.LocalDate
 
 @Composable
-fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel) {
+fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
     val pictureCount = 15
 
     LaunchedEffect(key1 = Unit) { viewModel.getPictureList(count = pictureCount) }
@@ -57,7 +59,17 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel) {
             title = stringResource(id = R.string.our_universe),
             onSortClick = { showSortPicturesDialog = true }
         )
-        PictureList(pictureList = pictureList)
+        PictureList(
+            pictureList = pictureList,
+            onRowClick = { index ->
+                pictureList?.get(index)?.let { picture ->
+                    navController.navigate(
+                        PictureRoutes.PictureDetails.createRouteWithArgs(pictureTitle = picture.title)
+                    )
+                }
+
+            }
+        )
     }
 
     if (showSortPicturesDialog) {
@@ -75,22 +87,31 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel) {
 }
 
 @Composable
-private fun PictureList(pictureList: List<AstronomyPicture>?) {
+private fun PictureList(pictureList: List<AstronomyPicture>?, onRowClick: (index: Int) -> Unit) {
     pictureList?.let { pictures ->
         if (pictures.isNotEmpty()) {
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                items(pictures) { picture -> PictureRow(picture = picture) }
+                itemsIndexed(pictures) { index, picture ->
+                    PictureRow(
+                        index = index,
+                        picture = picture,
+                        onClick = onRowClick
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun PictureRow(picture: AstronomyPicture) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+private fun PictureRow(index: Int, picture: AstronomyPicture, onClick: (index: Int) -> Unit) {
+    Row(
+        modifier = Modifier.clickable(onClick = { onClick(index) }),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         PictureImage(url = picture.url)
         Spacer(modifier = Modifier.width(15.dp))
         Column {
@@ -245,13 +266,13 @@ private fun DialogButton(isConfirmButton: Boolean, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: AstronomyPicture) {
-    PictureRow(picture = picture)
+    PictureRow(index = 1, picture = picture, onClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<AstronomyPicture>) {
-    PictureList(pictureList = pictureList)
+    PictureList(pictureList = pictureList, onRowClick = {})
 }
 
 @Preview(showBackground = true)
