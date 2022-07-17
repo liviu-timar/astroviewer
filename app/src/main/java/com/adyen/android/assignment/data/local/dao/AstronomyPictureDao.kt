@@ -15,6 +15,9 @@ interface AstronomyPictureDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(picture: AstronomyPictureEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(pictures: List<AstronomyPictureEntity>)
+
     @Query("DELETE FROM Pictures")
     suspend fun deleteAll()
 }

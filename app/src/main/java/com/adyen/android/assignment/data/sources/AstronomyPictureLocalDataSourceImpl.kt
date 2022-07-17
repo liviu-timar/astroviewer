@@ -16,7 +16,7 @@ class AstronomyPictureLocalDataSourceImpl @Inject constructor(
         astronomyPictureDao.get(count = count).map(AstronomyPictureEntity::asDomainModel)
 
     override suspend fun insertPictures(pictures: List<AstronomyPicture>) =
-        pictures.forEach { picture -> astronomyPictureDao.insert(picture.asEntity()) }
+        astronomyPictureDao.insert(pictures.map(AstronomyPicture::asEntity))
 
     override suspend fun deleteAllPictures() = astronomyPictureDao.deleteAll()
 }
