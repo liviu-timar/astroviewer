@@ -82,6 +82,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
             onDismissClick = { showSortPicturesDialog = false },
             onConfirmClick = { sortBy ->
                 viewModel.getPictureList(
+                    refresh = false,
                     count = pictureCount,
                     sortBy = sortBy
                 )
