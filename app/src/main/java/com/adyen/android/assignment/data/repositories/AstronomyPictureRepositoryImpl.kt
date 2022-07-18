@@ -9,7 +9,8 @@ import javax.inject.Inject
 class AstronomyPictureRepositoryImpl @Inject constructor(
     private val remoteDataSource: AstronomyPictureRemoteDataSource,
     private val localDataSource: AstronomyPictureLocalDataSource,
-    // The DAO can be used instead of the local data source as there is no extra logic needed, but let's illustrate having a local ds.
+    // PictureDao can be used instead of LocalDataSource as there is no extra logic in the data source,
+    // but let's illustrate having a local data source.
 ) : AstronomyPictureRepository {
 
     override suspend fun getPictures(refresh: Boolean, count: Int): List<AstronomyPicture> {
@@ -22,4 +23,6 @@ class AstronomyPictureRepositoryImpl @Inject constructor(
 
         return localDataSource.getPictures(count)
     }
+
+    override suspend fun getPicture(id: Int): AstronomyPicture = localDataSource.getPicture(id)
 }

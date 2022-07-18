@@ -15,6 +15,9 @@ class AstronomyPictureLocalDataSourceImpl @Inject constructor(
     override suspend fun getPictures(count: Int): List<AstronomyPicture> =
         astronomyPictureDao.get(count = count).map(AstronomyPictureEntity::asDomainModel)
 
+    override suspend fun getPicture(id: Int): AstronomyPicture =
+        astronomyPictureDao.getById(id = id).asDomainModel()
+
     override suspend fun insertPictures(pictures: List<AstronomyPicture>) =
         astronomyPictureDao.insert(pictures.map(AstronomyPicture::asEntity))
 

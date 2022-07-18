@@ -8,7 +8,7 @@ import java.time.LocalDate
 @Entity(tableName = "Pictures")
 data class AstronomyPictureEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0, // Dummy value. Will be replaced by Room when inserting into the db
     val title: String,
     val desc: String,
     val date: LocalDate,
@@ -16,6 +16,7 @@ data class AstronomyPictureEntity(
 )
 
 fun AstronomyPictureEntity.asDomainModel() = AstronomyPicture(
+    id = id,
     title = title,
     desc = desc,
     date = date,
@@ -23,7 +24,6 @@ fun AstronomyPictureEntity.asDomainModel() = AstronomyPicture(
 )
 
 fun AstronomyPicture.asEntity() = AstronomyPictureEntity(
-    id = 0, // Dummy value. Will be replaced by Room when inserting into the db
     title = title,
     desc = desc,
     date = date,

@@ -12,8 +12,8 @@ interface AstronomyPictureDao {
     @Query("SELECT * FROM Pictures LIMIT :count")
     suspend fun get(count: Int): List<AstronomyPictureEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(picture: AstronomyPictureEntity)
+    @Query("SELECT * FROM Pictures WHERE id=:id")
+    suspend fun getById(id: Int): AstronomyPictureEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(pictures: List<AstronomyPictureEntity>)

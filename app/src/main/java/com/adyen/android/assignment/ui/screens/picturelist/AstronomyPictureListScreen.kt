@@ -6,7 +6,7 @@ import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
@@ -66,13 +66,10 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
         )
         PictureList(
             pictureList = pictureList,
-            onRowClick = { index ->
-                pictureList?.get(index)?.let { picture ->
-                    navController.navigate(
-                        PictureRoutes.PictureDetails.createRouteWithArgs(pictureTitle = picture.title)
-                    )
-                }
-
+            onRowClick = { pictureId ->
+                navController.navigate(
+                    PictureRoutes.PictureDetails.createRouteWithArgs(pictureId = pictureId)
+                )
             }
         )
     }
@@ -93,18 +90,17 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 }
 
 @Composable
-private fun PictureList(pictureList: List<AstronomyPicture>?, onRowClick: (index: Int) -> Unit) {
+private fun PictureList(pictureList: List<AstronomyPicture>?, onRowClick: (pictureId: Int) -> Unit) {
     pictureList?.let { pictures ->
         if (pictures.isNotEmpty()) {
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                itemsIndexed(pictures) { index, picture ->
+                items(pictures) { picture ->
                     PictureRow(
-                        index = index,
                         picture = picture,
-                        onClick = onRowClick
+                        onClick = { pictureId -> onRowClick(pictureId) }
                     )
                 }
             }
@@ -113,9 +109,9 @@ private fun PictureList(pictureList: List<AstronomyPicture>?, onRowClick: (index
 }
 
 @Composable
-private fun PictureRow(index: Int, picture: AstronomyPicture, onClick: (index: Int) -> Unit) {
+private fun PictureRow(picture: AstronomyPicture, onClick: (pictureId: Int) -> Unit) {
     Row(
-        modifier = Modifier.clickable(onClick = { onClick(index) }),
+        modifier = Modifier.clickable(onClick = { onClick(picture.id) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
         PictureImage(url = picture.url)
@@ -272,7 +268,7 @@ private fun DialogButton(isConfirmButton: Boolean, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: AstronomyPicture) {
-    PictureRow(index = 1, picture = picture, onClick = {})
+    PictureRow(picture = picture, onClick = {})
 }
 
 @Preview(showBackground = true)

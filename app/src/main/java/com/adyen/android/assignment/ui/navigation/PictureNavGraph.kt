@@ -11,16 +11,21 @@ import com.adyen.android.assignment.ui.screens.picturelist.AstronomyPictureListS
 fun NavGraphBuilder.pictureNavGraph(navController: NavController) {
     navigation(startDestination = PictureRoutes.PictureList.ROUTE, route = PictureRoutes.ROOT) {
         composable(PictureRoutes.PictureList.ROUTE) {
-            AstronomyPictureListScreen(viewModel = hiltViewModel(), navController = navController)
+            AstronomyPictureListScreen(
+                viewModel = hiltViewModel(),
+                navController = navController
+            )
         }
 
         composable(PictureRoutes.PictureDetails.ROUTE) { backStackEntry ->
             backStackEntry.arguments.let { args ->
-                with(PictureRoutes.PictureDetails) {
-                    val pictureTitle = args?.getString(PARAM_PICTURE_TITLE)
+                val pictureId = args?.getString(PictureRoutes.PictureDetails.PARAM_PICTURE_ID)
 
-                    AstronomyPictureDetailsScreen(pictureTitle = pictureTitle)
-                }
+                AstronomyPictureDetailsScreen(
+                    viewModel = hiltViewModel(),
+                    navController = navController,
+                    pictureId = pictureId?.toInt() ?: 0
+                )
             }
         }
     }
@@ -35,11 +40,11 @@ object PictureRoutes {
     }
 
     object PictureDetails {
-        const val PARAM_PICTURE_TITLE = "pictureTitle"
+        const val PARAM_PICTURE_ID = "pictureId"
 
         private const val BASE_ROUTE = "$ROOT/details"
-        const val ROUTE = "$BASE_ROUTE/{$PARAM_PICTURE_TITLE}"
+        const val ROUTE = "$BASE_ROUTE/{$PARAM_PICTURE_ID}"
 
-        fun createRouteWithArgs(pictureTitle: String) = "$BASE_ROUTE/$pictureTitle"
+        fun createRouteWithArgs(pictureId: Int) = "$BASE_ROUTE/$pictureId"
     }
 }

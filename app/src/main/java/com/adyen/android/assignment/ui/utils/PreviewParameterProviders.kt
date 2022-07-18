@@ -8,6 +8,7 @@ class PreviewPictureProvider : PreviewParameterProvider<AstronomyPicture> {
     override val values: Sequence<AstronomyPicture>
         get() = sequenceOf(
             AstronomyPicture(
+                id = 1,
                 title = "Recycling Cassiopeia A",
                 desc = "For billions of years massive stars in our Milky Way Galaxy have lived spectacular lives.",
                 date = LocalDate.parse("2002-07-12"),
@@ -22,12 +23,14 @@ class PreviewPictureListProvider : PreviewParameterProvider<List<AstronomyPictur
         get() = sequenceOf(
             listOf(
                 AstronomyPicture(
+                    id = 1,
                     title = "Recycling Cassiopeia A",
                     desc = "For billions of years massive stars in our Milky Way Galaxy have lived spectacular lives.",
                     date = LocalDate.parse("2002-07-12"),
                     url = "https://apod.nasa.gov/apod/image/0207/casA_hst.jpg"
                 ),
                 AstronomyPicture(
+                    id = 2,
                     title = "Simulated Supergiant Star",
                     desc = "Looking for that perfect holiday gift for an astronomer ? Consider this star in a box.",
                     date = LocalDate.parse("2000-12-22"),
