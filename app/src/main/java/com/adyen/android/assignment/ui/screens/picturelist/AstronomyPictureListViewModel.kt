@@ -17,6 +17,7 @@ class AstronomyPictureListViewModel @Inject constructor(
 ) : ViewModel() {
 
     var isDataFirstLoad: Boolean = true
+    var sortPicturesBy = SortBy.DATE_DESC
 
     private val _pictures = MutableLiveData<List<AstronomyPicture>>()
     val pictures: LiveData<List<AstronomyPicture>> = _pictures

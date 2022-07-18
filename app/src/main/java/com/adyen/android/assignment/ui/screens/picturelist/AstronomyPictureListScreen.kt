@@ -51,6 +51,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 
     val pictureList by viewModel.pictures.observeAsState()
     var showSortPicturesDialog by remember { mutableStateOf(false) }
+    var sortPicturesBy by remember { mutableStateOf(SortBy.DATE_DESC) }
 
     Column {
         CustomTopAppBar(
@@ -71,14 +72,23 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
     }
 
     if (showSortPicturesDialog) {
+        var selectedSortOption by remember { mutableStateOf(viewModel.sortPicturesBy) }
+
         SortPicturesDialog(
-            onDismissClick = { showSortPicturesDialog = false },
+            sortBy = selectedSortOption,
+            onOptionClick = { clickedOption -> selectedSortOption = clickedOption },
+            onDismissClick = {
+                selectedSortOption = viewModel.sortPicturesBy
+                showSortPicturesDialog = false
+            },
             onConfirmClick = { sortBy ->
                 viewModel.getPictureList(
                     refresh = false,
                     count = pictureCount,
                     sortBy = sortBy
                 )
+
+                viewModel.sortPicturesBy = selectedSortOption
                 showSortPicturesDialog = false
             }
         )
@@ -151,14 +161,19 @@ private fun PictureDate(date: LocalDate) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun SortPicturesDialog(onDismissClick: () -> Unit, onConfirmClick: (SortBy) -> Unit) {
+private fun SortPicturesDialog(
+    sortBy: SortBy,
+    onOptionClick: (SortBy) -> Unit,
+    onDismissClick: () -> Unit,
+    onConfirmClick: (SortBy) -> Unit,
+) {
     Dialog(
         onDismissRequest = onDismissClick,
-        properties = DialogProperties(
-            usePlatformDefaultWidth = false
-        )
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         DialogContent(
+            sortBy = sortBy,
+            onOptionClick = onOptionClick,
             onDismissClick = onDismissClick,
             onConfirmClick = onConfirmClick
         )
@@ -166,9 +181,12 @@ private fun SortPicturesDialog(onDismissClick: () -> Unit, onConfirmClick: (Sort
 }
 
 @Composable
-private fun DialogContent(onDismissClick: () -> Unit, onConfirmClick: (SortBy) -> Unit) {
-    var sortPicturesBy by remember { mutableStateOf(SortBy.DATE_DESC) }
-
+private fun DialogContent(
+    sortBy: SortBy,
+    onOptionClick: (SortBy) -> Unit,
+    onDismissClick: () -> Unit,
+    onConfirmClick: (SortBy) -> Unit,
+) {
     Column(
         modifier = Modifier
             .padding(all = 40.dp)
@@ -181,19 +199,19 @@ private fun DialogContent(onDismissClick: () -> Unit, onConfirmClick: (SortBy) -
         Spacer(modifier = Modifier.height(20.dp))
         DialogOption(
             label = stringResource(id = R.string.sort_by_title),
-            selected = sortPicturesBy == SortBy.TITLE_ASC,
-            onClick = { sortPicturesBy = SortBy.TITLE_ASC }
+            selected = sortBy == SortBy.TITLE_ASC,
+            onClick = { onOptionClick(SortBy.TITLE_ASC) }
         )
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         DialogOption(
             label = stringResource(id = R.string.sort_by_date),
-            selected = sortPicturesBy == SortBy.DATE_DESC,
-            onClick = { sortPicturesBy = SortBy.DATE_DESC }
+            selected = sortBy == SortBy.DATE_DESC,
+            onClick = { onOptionClick(SortBy.DATE_DESC) }
         )
         Spacer(modifier = Modifier.height(40.dp))
         DialogButton(
             isConfirmButton = true,
-            onClick = { onConfirmClick(sortPicturesBy) }
+            onClick = { onConfirmClick(sortBy) }
         )
         Spacer(modifier = Modifier.height(15.dp))
         DialogButton(
@@ -270,5 +288,5 @@ fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pict
 @Preview(showBackground = true)
 @Composable
 fun PreviewSortDialog() {
-    SortPicturesDialog(onDismissClick = {}, onConfirmClick = {})
+    SortPicturesDialog(sortBy = SortBy.DATE_DESC, onOptionClick = {}, onDismissClick = {}, onConfirmClick = {})
 }
