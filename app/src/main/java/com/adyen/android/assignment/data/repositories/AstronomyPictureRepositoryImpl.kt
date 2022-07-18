@@ -15,11 +15,15 @@ class AstronomyPictureRepositoryImpl @Inject constructor(
 ) : AstronomyPictureRepository {
 
     override suspend fun getPictures(refresh: Boolean, count: Int): List<AstronomyPicture> {
-        val isCacheEmpty = localDataSource.getPictures(count).isEmpty()
+        if (refresh) {
+            val remotePictures = try {
+                remoteDataSource.getPictures(count)
+            } catch (e: Exception) {
+                return localDataSource.getPictures(count)
+            }
 
-        if (isCacheEmpty || refresh) {
-            if (refresh) localDataSource.deleteAllPictures()
-            localDataSource.insertPictures(remoteDataSource.getPictures(count))
+            localDataSource.deleteAllPictures()
+            localDataSource.insertPictures(remotePictures)
         }
 
         return localDataSource.getPictures(count)
