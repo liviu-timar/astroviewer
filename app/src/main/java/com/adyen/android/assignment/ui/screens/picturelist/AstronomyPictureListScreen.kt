@@ -57,14 +57,17 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
             title = stringResource(id = R.string.our_universe),
             onSortClick = { showSortPicturesDialog = true }
         )
-        PictureList(
-            pictureList = pictureList,
-            onRowClick = { pictureId ->
-                navController.navigate(
-                    PictureRoutes.PictureDetails.createRouteWithArgs(pictureId = pictureId)
-                )
-            }
-        )
+
+        pictureList?.let { pictures ->
+            PictureList(
+                pictures = pictures,
+                onRowClick = { pictureId ->
+                    navController.navigate(
+                        PictureRoutes.PictureDetails.createRouteWithArgs(pictureId = pictureId)
+                    )
+                }
+            )
+        } ?: Shimmer { ShimmerPictureList(brush = this) }
     }
 
     if (showSortPicturesDialog) {
@@ -83,19 +86,17 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 }
 
 @Composable
-private fun PictureList(pictureList: List<AstronomyPicture>?, onRowClick: (pictureId: Int) -> Unit) {
-    pictureList?.let { pictures ->
-        if (pictures.isNotEmpty()) {
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                items(pictures) { picture ->
-                    PictureRow(
-                        picture = picture,
-                        onClick = { pictureId -> onRowClick(pictureId) }
-                    )
-                }
+private fun PictureList(pictures: List<AstronomyPicture>, onRowClick: (pictureId: Int) -> Unit) {
+    if (pictures.isNotEmpty()) {
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            items(pictures) { picture ->
+                PictureRow(
+                    picture = picture,
+                    onClick = { pictureId -> onRowClick(pictureId) }
+                )
             }
         }
     }
@@ -263,7 +264,7 @@ fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: 
 @Preview(showBackground = true)
 @Composable
 fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<AstronomyPicture>) {
-    PictureList(pictureList = pictureList, onRowClick = {})
+    PictureList(pictures = pictureList, onRowClick = {})
 }
 
 @Preview(showBackground = true)
