@@ -12,4 +12,7 @@
     <string name="sort_by_date">Sort by Date (Newest)</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
+    <string name="no_network_connection">No network connection</string>
+    <string name="check_network_connection">Please check your network connection and try again.</string>
+    <string name="try_again">Try Again</string>
 </resources>

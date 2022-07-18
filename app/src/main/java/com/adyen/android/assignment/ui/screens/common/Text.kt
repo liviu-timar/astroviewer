@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.adyen.android.assignment.ui.theme.Roboto
@@ -17,6 +18,7 @@ fun TextCustom(
     fontSize: TextUnit = 16.sp,
     fontStyle: FontStyle = FontStyle.Normal,
     fontWeight: FontWeight = FontWeight.Normal,
+    textAlign: TextAlign? = null,
     lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE
 ) {
@@ -28,6 +30,7 @@ fun TextCustom(
         fontStyle = fontStyle,
         fontWeight = fontWeight,
         fontFamily = Roboto,
+        textAlign = textAlign,
         lineHeight = lineHeight,
         maxLines = maxLines,
     )

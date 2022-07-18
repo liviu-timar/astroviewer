@@ -1,5 +1,6 @@
 package com.adyen.android.assignment.ui.screens.picturelist
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
@@ -13,13 +14,16 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -36,26 +40,60 @@ import com.adyen.android.assignment.ui.theme.BackgroundSecondary
 import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
 import com.adyen.android.assignment.ui.utils.PreviewPictureProvider
+import com.adyen.android.assignment.ui.utils.hasNetworkConnection
 import java.time.LocalDate
+
+private const val PICTURE_COUNT = 15
 
 @Composable
 fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
-    val pictureCount = 15
-
-    LaunchedEffect(key1 = Unit) {
-        if (viewModel.isDataFirstLoad) {
-            viewModel.getPictureList(count = pictureCount)
-            viewModel.isDataFirstLoad = false
-        }
-    }
-
+    val context = LocalContext.current
+    var hasNetworkConnection by rememberSaveable { mutableStateOf(context.hasNetworkConnection()) }
     val pictureList by viewModel.pictures.observeAsState()
-    var showSortPicturesDialog by remember { mutableStateOf(false) }
-    var sortPicturesBy by remember { mutableStateOf(SortBy.DATE_DESC) }
+
+    if (viewModel.isDataFirstLoad) {
+        if (hasNetworkConnection) {
+            LaunchedEffect(key1 = Unit) {
+                viewModel.getPictureList(count = PICTURE_COUNT)
+                viewModel.isDataFirstLoad = false
+            }
+
+            ScreenContent(
+                viewModel = viewModel,
+                navController = navController,
+                pictureList = pictureList,
+            )
+        } else {
+            NoNetworkConnection(onTryAgain = { hasNetworkConnection = context.hasNetworkConnection() })
+        }
+    } else {
+        ScreenContent(
+            viewModel = viewModel,
+            navController = navController,
+            pictureList = pictureList,
+        )
+    }
+}
+
+@Composable
+private fun ScreenContent(
+    viewModel: AstronomyPictureListViewModel,
+    navController: NavController,
+    pictureList: List<AstronomyPicture>?
+) {
+    var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
     Column {
         CustomTopAppBar(
             title = stringResource(id = R.string.our_universe),
+            onFetchClick = {
+                viewModel.clearPictureList()
+                viewModel.getPictureList(
+                    refresh = true,
+                    count = PICTURE_COUNT,
+                    sortBy = viewModel.sortPicturesBy
+                )
+            },
             onSortClick = { showSortPicturesDialog = true }
         )
 
@@ -72,7 +110,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
     }
 
     if (showSortPicturesDialog) {
-        var selectedSortOption by remember { mutableStateOf(viewModel.sortPicturesBy) }
+        var selectedSortOption by rememberSaveable { mutableStateOf(viewModel.sortPicturesBy) }
 
         SortPicturesDialog(
             sortBy = selectedSortOption,
@@ -84,7 +122,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
             onConfirmClick = { sortBy ->
                 viewModel.getPictureList(
                     refresh = false,
-                    count = pictureCount,
+                    count = PICTURE_COUNT,
                     sortBy = sortBy
                 )
 
@@ -115,10 +153,12 @@ private fun PictureList(pictures: List<AstronomyPicture>, onRowClick: (pictureId
 @Composable
 private fun PictureRow(picture: AstronomyPicture, onClick: (pictureId: Int) -> Unit) {
     Row(
-        modifier = Modifier.clickable(onClick = { onClick(picture.id) }),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onClick(picture.id) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(url = picture.url)
+        PictureImage(url = picture.url)
         Spacer(modifier = Modifier.width(15.dp))
         Column {
             PictureTitle(title = picture.title)
@@ -129,7 +169,7 @@ private fun PictureRow(picture: AstronomyPicture, onClick: (pictureId: Int) -> U
 }
 
 @Composable
-private fun Image(url: String) {
+private fun PictureImage(url: String) {
     AstronomyImage(
         url = url,
         modifier = Modifier
@@ -271,6 +311,39 @@ private fun DialogButton(isConfirmButton: Boolean, onClick: () -> Unit) {
         label = if (isConfirmButton) stringResource(id = R.string.apply) else stringResource(id = R.string.cancel),
         backgroundColor = if (isConfirmButton) Primary else BackgroundSecondary
     )
+}
+
+@Composable
+private fun NoNetworkConnection(onTryAgain: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(horizontal = 35.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_vector),
+            contentDescription = null,
+            modifier = Modifier.size(120.dp)
+        )
+        Spacer(modifier = Modifier.height(40.dp))
+        TextCustomMedium(
+            text = stringResource(id = R.string.no_network_connection),
+            fontSize = 20.sp
+        )
+        Spacer(modifier = Modifier.height(15.dp))
+        TextCustom(
+            text = stringResource(id = R.string.check_network_connection),
+            textAlign = TextAlign.Center,
+            lineHeight = 25.sp
+        )
+        Spacer(modifier = Modifier.height(30.dp))
+        ButtonCustom(
+            onClick = onTryAgain,
+            label = stringResource(id = R.string.try_again)
+        )
+    }
 }
 
 @Preview(showBackground = true)
