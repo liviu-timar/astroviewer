@@ -27,4 +27,8 @@ class AstronomyPictureListViewModel @Inject constructor(
             _pictures.value = getAstronomyPictureListUseCase(refresh, count, sortBy)
         }
     }
+
+    fun clearPictureList() {
+        _pictures.value = null
+    }
 }

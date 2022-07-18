@@ -24,6 +24,7 @@ import com.adyen.android.assignment.ui.theme.BackgroundPrimary
 fun CustomTopAppBar(
     title: String,
     onBackClick: (() -> Unit)? = null,
+    onFetchClick: (() -> Unit)? = null,
     onSortClick: (() -> Unit)? = null,
 ) {
     TopAppBar(
@@ -36,7 +37,6 @@ fun CustomTopAppBar(
                 ClickableIcon(
                     imageResId = R.drawable.ic_arrow_left,
                     imageWidth = 10.dp,
-                    alignment = Alignment.CenterStart,
                     onClick = onBackClick
                 )
             }
@@ -46,30 +46,36 @@ fun CustomTopAppBar(
                 fontSize = 20.sp,
                 maxLines = 1
             )
-            onSortClick?.let {
-                ClickableIcon(
-                    imageResId = R.drawable.ic_reorder,
-                    imageWidth = 25.dp,
-                    alignment = Alignment.CenterEnd,
-                    onClick = onSortClick
-                )
+            Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+                onFetchClick?.let {
+                    ClickableIcon(
+                        imageResId = R.drawable.ic_fetch,
+                        imageWidth = 25.dp,
+                        onClick = onFetchClick
+                    )
+                }
+                onSortClick?.let {
+                    ClickableIcon(
+                        imageResId = R.drawable.ic_reorder,
+                        imageWidth = 25.dp,
+                        onClick = onSortClick
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun BoxScope.ClickableIcon(
+private fun ClickableIcon(
     @DrawableRes imageResId: Int,
     imageWidth: Dp,
-    alignment: Alignment,
     onClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxHeight()
             .width(48.dp)
-            .align(alignment)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
@@ -91,6 +97,7 @@ fun PreviewCustomTopAppBar() {
     CustomTopAppBar(
         title = stringResource(id = R.string.our_universe),
         onBackClick = {},
+        onFetchClick = {},
         onSortClick = {}
     )
 }
