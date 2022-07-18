@@ -18,8 +18,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,20 +27,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.adyen.android.assignment.R
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import com.adyen.android.assignment.domain.usecases.SortBy
 import com.adyen.android.assignment.ui.navigation.PictureRoutes
+import com.adyen.android.assignment.ui.screens.common.*
 import com.adyen.android.assignment.ui.theme.BackgroundSecondary
 import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
 import com.adyen.android.assignment.ui.utils.PreviewPictureProvider
-import com.adyen.android.assignment.ui.widgets.ButtonCustom
-import com.adyen.android.assignment.ui.widgets.CustomTopAppBar
-import com.adyen.android.assignment.ui.widgets.TextCustom
-import com.adyen.android.assignment.ui.widgets.TextCustomMedium
 import java.time.LocalDate
 
 @Composable
@@ -114,7 +107,7 @@ private fun PictureRow(picture: AstronomyPicture, onClick: (pictureId: Int) -> U
         modifier = Modifier.clickable(onClick = { onClick(picture.id) }),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        PictureImage(url = picture.url)
+        Image(url = picture.url)
         Spacer(modifier = Modifier.width(15.dp))
         Column {
             PictureTitle(title = picture.title)
@@ -125,17 +118,13 @@ private fun PictureRow(picture: AstronomyPicture, onClick: (pictureId: Int) -> U
 }
 
 @Composable
-private fun PictureImage(url: String) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(url)
-            .crossfade(durationMillis = 200)
-            .build(),
-        contentDescription = stringResource(R.string.astronomy_picture),
+private fun Image(url: String) {
+    AstronomyImage(
+        url = url,
         modifier = Modifier
             .size(40.dp)
             .clip(shape = CircleShape),
-        contentScale = ContentScale.Crop,
+        crossfadeMillis = 200,
         alpha = 0.8f,
         error = painterResource(id = R.drawable.ic_warped),
         fallback = painterResource(id = R.drawable.ic_warped),

@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.ui.widgets
+package com.adyen.android.assignment.ui.screens.common
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

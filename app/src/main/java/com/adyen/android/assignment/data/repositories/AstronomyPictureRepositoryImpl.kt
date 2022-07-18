@@ -9,7 +9,8 @@ import javax.inject.Inject
 class AstronomyPictureRepositoryImpl @Inject constructor(
     private val remoteDataSource: AstronomyPictureRemoteDataSource,
     private val localDataSource: AstronomyPictureLocalDataSource,
-    // PictureDao can be used instead of LocalDataSource as there is no extra logic in the data source,
+    // The PictureDao interface can be used instead of LocalDataSource
+    // as there is no extra logic in the data source,
     // but let's illustrate having a local data source.
 ) : AstronomyPictureRepository {
 

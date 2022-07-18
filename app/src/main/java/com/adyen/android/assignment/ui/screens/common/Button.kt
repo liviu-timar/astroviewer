@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.ui.widgets
+package com.adyen.android.assignment.ui.screens.common
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

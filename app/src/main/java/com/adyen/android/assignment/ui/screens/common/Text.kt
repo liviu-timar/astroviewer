@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.ui.widgets
+package com.adyen.android.assignment.ui.screens.common
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,6 +17,7 @@ fun TextCustom(
     fontSize: TextUnit = 16.sp,
     fontStyle: FontStyle = FontStyle.Normal,
     fontWeight: FontWeight = FontWeight.Normal,
+    lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE
 ) {
     Text(
@@ -27,6 +28,7 @@ fun TextCustom(
         fontStyle = fontStyle,
         fontWeight = fontWeight,
         fontFamily = Roboto,
+        lineHeight = lineHeight,
         maxLines = maxLines,
     )
 }
@@ -35,12 +37,14 @@ fun TextCustom(
 fun TextCustomMedium(
     text: String,
     fontSize: TextUnit = 16.sp,
+    lineHeight: TextUnit = TextUnit.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
 ) {
     TextCustom(
         text = text,
         fontSize = fontSize,
         fontWeight = FontWeight.Medium,
+        lineHeight = lineHeight,
         maxLines = maxLines
     )
 }
