@@ -20,6 +20,6 @@ abstract class DataSourceModule {
 
     @Binds
     abstract fun bindAstronomyPictureLocalDataSource(
-        remoteDataSource: AstronomyPictureDbDataSource
+        localDataSource: AstronomyPictureDbDataSource
     ): AstronomyPictureLocalDataSource
 }

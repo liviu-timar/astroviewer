@@ -43,7 +43,7 @@ class AstronomyPictureListViewModelTest {
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun picturesLiveData_validPictureList_returnsPictureListItems() = runTest {
+    fun picturesLiveData_pictureModelList_returnsPictureListItems() = runTest {
         // Given
         whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)

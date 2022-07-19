@@ -60,6 +60,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
                 pictureList = pictureList,
             )
         } else {
+            // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
             NoNetworkConnection(onTryAgain = { hasNetworkConnection = context.hasNetworkConnection() })
         }
     } else {
@@ -226,7 +227,7 @@ private fun DialogContent(
     Column(
         modifier = Modifier
             .padding(all = 40.dp)
-            .fillMaxWidth()
+            .fillMaxWidth() // Should have smaller width on landscape (including buttons)
             .clip(shape = RoundedCornerShape(size = 10.dp))
             .background(color = BackgroundSecondary)
             .padding(all = 20.dp)

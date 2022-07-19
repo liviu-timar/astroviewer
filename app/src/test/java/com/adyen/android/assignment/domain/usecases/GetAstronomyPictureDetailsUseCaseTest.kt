@@ -2,6 +2,7 @@ package com.adyen.android.assignment.domain.usecases
 
 import com.adyen.android.assignment.domain.repositories.AstronomyPictureRepository
 import com.adyen.android.assignment.utils.testPictureModelList
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
@@ -12,6 +13,7 @@ import org.mockito.Mockito.verify
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetAstronomyPictureDetailsUseCaseTest {
 
     private lateinit var useCase: GetAstronomyPictureDetailsUseCase
