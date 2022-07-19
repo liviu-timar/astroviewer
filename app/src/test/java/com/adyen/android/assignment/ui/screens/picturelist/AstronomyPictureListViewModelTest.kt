@@ -1,11 +1,10 @@
 package com.adyen.android.assignment.ui.screens.picturelist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.adyen.android.assignment.domain.usecases.FormatDateUseCase
 import com.adyen.android.assignment.domain.usecases.GetAstronomyPictureListUseCase
 import com.adyen.android.assignment.domain.usecases.SortBy
-import com.adyen.android.assignment.utils.MainDispatcherRule
-import com.adyen.android.assignment.utils.getOrAwaitValue
-import com.adyen.android.assignment.utils.testPictureList
+import com.adyen.android.assignment.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -33,25 +32,28 @@ class AstronomyPictureListViewModelTest {
 
     private lateinit var viewModel: AstronomyPictureListViewModel
     private lateinit var mockGetAstronomyPictureListUseCase: GetAstronomyPictureListUseCase
+    private lateinit var mockFormatDateUseCase: FormatDateUseCase
 
     @Before
     fun setUp() {
         mockGetAstronomyPictureListUseCase = mock()
-        viewModel = AstronomyPictureListViewModel(mockGetAstronomyPictureListUseCase)
+        mockFormatDateUseCase = mock()
+        viewModel = AstronomyPictureListViewModel(mockGetAstronomyPictureListUseCase, mockFormatDateUseCase)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun picturesLiveData_validPictureList_returnsPictureList() = runTest {
+    fun picturesLiveData_validPictureList_returnsPictureListItems() = runTest {
         // Given
-        whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureList)
+        whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
+        whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         // When
         viewModel.getPictureList(count = 2)
         val pictures = viewModel.pictures.getOrAwaitValue()
 
         // Then
-        assertThat(pictures, IsEqual(testPictureList)) // Verify state - variable value
+        assertThat(pictures, IsEqual(testPictureListItems)) // Verify state - variable value
     }
 
     @Test
@@ -59,6 +61,8 @@ class AstronomyPictureListViewModelTest {
         val refresh = true
         val count = 2
         val sortBy = SortBy.TITLE_ASC
+        whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
+        whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         viewModel.getPictureList(refresh, count, sortBy)
         viewModel.pictures.getOrAwaitValue()

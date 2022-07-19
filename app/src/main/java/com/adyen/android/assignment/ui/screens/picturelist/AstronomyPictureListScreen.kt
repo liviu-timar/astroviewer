@@ -29,16 +29,15 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.adyen.android.assignment.R
-import com.adyen.android.assignment.domain.models.AstronomyPicture
 import com.adyen.android.assignment.domain.usecases.SortBy
 import com.adyen.android.assignment.ui.navigation.PictureRoutes
 import com.adyen.android.assignment.ui.screens.common.*
+import com.adyen.android.assignment.ui.screens.picturelist.models.PictureListItem
 import com.adyen.android.assignment.ui.theme.BackgroundSecondary
 import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
 import com.adyen.android.assignment.ui.utils.PreviewPictureProvider
 import com.adyen.android.assignment.ui.utils.hasNetworkConnection
-import java.time.LocalDate
 
 private const val PICTURE_COUNT = 15
 
@@ -76,7 +75,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 private fun ScreenContent(
     viewModel: AstronomyPictureListViewModel,
     navController: NavController,
-    pictureList: List<AstronomyPicture>?
+    pictureList: List<PictureListItem>?
 ) {
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -131,7 +130,7 @@ private fun ScreenContent(
 }
 
 @Composable
-private fun PictureList(pictures: List<AstronomyPicture>, onRowClick: (pictureId: Int) -> Unit) {
+private fun PictureList(pictures: List<PictureListItem>, onRowClick: (pictureId: Int) -> Unit) {
     if (pictures.isNotEmpty()) {
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
@@ -148,7 +147,7 @@ private fun PictureList(pictures: List<AstronomyPicture>, onRowClick: (pictureId
 }
 
 @Composable
-private fun PictureRow(picture: AstronomyPicture, onClick: (pictureId: Int) -> Unit) {
+private fun PictureRow(picture: PictureListItem, onClick: (pictureId: Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -189,9 +188,9 @@ private fun PictureTitle(title: String) {
 }
 
 @Composable
-private fun PictureDate(date: LocalDate) {
+private fun PictureDate(date: String) {
     TextCustom(
-        text = date.toString(),
+        text = date,
         fontSize = 14.sp
     )
 }
@@ -346,13 +345,13 @@ private fun NoNetworkConnection(onTryAgain: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: AstronomyPicture) {
+fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: PictureListItem) {
     PictureRow(picture = picture, onClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<AstronomyPicture>) {
+fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<PictureListItem>) {
     PictureList(pictures = pictureList, onRowClick = {})
 }
 

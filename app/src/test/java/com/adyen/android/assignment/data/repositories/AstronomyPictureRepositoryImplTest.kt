@@ -3,7 +3,7 @@ package com.adyen.android.assignment.data.repositories
 import com.adyen.android.assignment.domain.repositories.AstronomyPictureRepository
 import com.adyen.android.assignment.domain.sources.AstronomyPictureLocalDataSource
 import com.adyen.android.assignment.domain.sources.AstronomyPictureRemoteDataSource
-import com.adyen.android.assignment.utils.testPictureList
+import com.adyen.android.assignment.utils.testPictureModelList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -34,7 +34,7 @@ class AstronomyPictureRepositoryImplTest {
         // Given
         val refresh = true
         val count = 2
-        whenever(mockRemoteDataSource.getPictures(anyInt())).thenReturn(testPictureList)
+        whenever(mockRemoteDataSource.getPictures(anyInt())).thenReturn(testPictureModelList)
 
         // When
         repository.getPictures(refresh, count)
@@ -42,7 +42,7 @@ class AstronomyPictureRepositoryImplTest {
         // Then
         verify(mockRemoteDataSource).getPictures(count) // Verify behaviour - method calls with specific arg
         verify(mockLocalDataSource).deleteAllPictures()
-        verify(mockLocalDataSource).insertPictures(testPictureList)
+        verify(mockLocalDataSource).insertPictures(testPictureModelList)
         verify(mockLocalDataSource).getPictures(count)
     }
 
@@ -63,26 +63,26 @@ class AstronomyPictureRepositoryImplTest {
     fun getPictures_refreshTrueAndCount_returnsPictureList() = runTest {
         val refresh = true
         val count = 2
-        whenever(mockLocalDataSource.getPictures(anyInt())).thenReturn(testPictureList)
+        whenever(mockLocalDataSource.getPictures(anyInt())).thenReturn(testPictureModelList)
 
         // When
         val pictures = repository.getPictures(refresh, count)
 
         // Then
-        assertThat(pictures, IsEqual(testPictureList)) // Verify state - variable value
+        assertThat(pictures, IsEqual(testPictureModelList)) // Verify state - variable value
     }
 
     @Test
     fun getPictures_refreshFalseAndCount_returnsPictureList() = runTest {
         val refresh = false
         val count = 2
-        whenever(mockLocalDataSource.getPictures(anyInt())).thenReturn(testPictureList)
+        whenever(mockLocalDataSource.getPictures(anyInt())).thenReturn(testPictureModelList)
 
         // When
         val pictures = repository.getPictures(refresh, count)
 
         // Then
-        assertThat(pictures, IsEqual(testPictureList))
+        assertThat(pictures, IsEqual(testPictureModelList))
     }
 
     @Test
@@ -96,10 +96,10 @@ class AstronomyPictureRepositoryImplTest {
 
     @Test
     fun getPicture_anyId_returnsPicture() = runTest {
-        whenever(mockLocalDataSource.getPicture(anyInt())).thenReturn(testPictureList[0])
+        whenever(mockLocalDataSource.getPicture(anyInt())).thenReturn(testPictureModelList[0])
 
         val picture = repository.getPicture(anyInt())
 
-        assertThat(picture, IsEqual(testPictureList[0]))
+        assertThat(picture, IsEqual(testPictureModelList[0]))
     }
 }

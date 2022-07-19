@@ -16,12 +16,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.adyen.android.assignment.R
-import com.adyen.android.assignment.domain.models.AstronomyPicture
 import com.adyen.android.assignment.ui.screens.common.AstronomyImage
 import com.adyen.android.assignment.ui.screens.common.CustomTopAppBar
 import com.adyen.android.assignment.ui.screens.common.TextCustom
 import com.adyen.android.assignment.ui.screens.common.TextCustomMedium
-import java.time.LocalDate
+import com.adyen.android.assignment.ui.screens.picturedetails.models.PictureDetails
 
 @Composable
 fun AstronomyPictureDetailsScreen(
@@ -49,7 +48,7 @@ fun AstronomyPictureDetailsScreen(
 }
 
 @Composable
-private fun PictureDetails(details: AstronomyPicture) {
+private fun PictureDetails(details: PictureDetails) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Image(url = details.url)
         Column(modifier = Modifier.padding(all = 30.dp)) {
@@ -88,8 +87,8 @@ private fun Title(title: String) {
 }
 
 @Composable
-private fun Date(date: LocalDate) {
-    TextCustom(text = date.toString())
+private fun Date(date: String) {
+    TextCustom(text = date)
 }
 
 @Composable

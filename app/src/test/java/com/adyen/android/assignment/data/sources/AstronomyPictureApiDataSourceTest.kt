@@ -2,7 +2,7 @@ package com.adyen.android.assignment.data.sources
 
 import com.adyen.android.assignment.data.api.PlanetaryService
 import com.adyen.android.assignment.utils.testPictureDtoList
-import com.adyen.android.assignment.utils.testPictureList
+import com.adyen.android.assignment.utils.testPictureModelList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -49,6 +49,6 @@ class AstronomyPictureApiDataSourceTest {
         val pictures = dataSource.getPictures(2)
 
         // Then
-        assertThat(pictures, IsEqual(testPictureList)) // Verify state - returned data
+        assertThat(pictures, IsEqual(testPictureModelList)) // Verify state - returned data
     }
 }
