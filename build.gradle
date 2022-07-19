@@ -17,6 +17,7 @@ buildscript {
         hiltNavigationComposeVersion = '1.0.0'
         composeNavigationVersion = '2.5.0'
         roomVersion = '2.4.2'
+        archTestingVersion = '2.1.0'
     }
 
     repositories {
