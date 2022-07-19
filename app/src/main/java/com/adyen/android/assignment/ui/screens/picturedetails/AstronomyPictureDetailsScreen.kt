@@ -11,11 +11,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.adyen.android.assignment.R
 import com.adyen.android.assignment.ui.screens.common.AstronomyImage
 import com.adyen.android.assignment.ui.screens.common.CustomTopAppBar
 import com.adyen.android.assignment.ui.screens.common.TextCustom
@@ -36,11 +34,10 @@ fun AstronomyPictureDetailsScreen(
 
     val pictureDetails by viewModel.pictureDetails.observeAsState()
 
-    Box {
+    Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
         pictureDetails?.let { details -> PictureDetails(details = details) } ?: TextCustom(text = "No data")
 
         CustomTopAppBar(
-            title = stringResource(id = R.string.our_universe),
             isTransparent = true,
             onBackClick = { navController.popBackStack() }
         )
@@ -49,7 +46,7 @@ fun AstronomyPictureDetailsScreen(
 
 @Composable
 private fun PictureDetails(details: PictureDetails) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column {
         Image(url = details.url)
         Column(modifier = Modifier.padding(all = 30.dp)) {
             Title(title = details.title)
