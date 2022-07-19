@@ -1,9 +1,6 @@
 package com.adyen.android.assignment.ui.screens.picturelist
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -234,6 +231,7 @@ private fun DialogContent(
             .clip(shape = RoundedCornerShape(size = 10.dp))
             .background(color = BackgroundSecondary)
             .padding(all = 20.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         DialogTitle()
         Spacer(modifier = Modifier.height(20.dp))
