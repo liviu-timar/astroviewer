@@ -23,7 +23,7 @@ import com.adyen.android.assignment.ui.theme.BackgroundPrimary
 
 @Composable
 fun CustomTopAppBar(
-    title: String,
+    title: String? = null,
     isTransparent: Boolean = false,
     onBackClick: (() -> Unit)? = null,
     onFetchClick: (() -> Unit)? = null,
@@ -42,12 +42,14 @@ fun CustomTopAppBar(
                     onClick = onBackClick
                 )
             }
-            TextCustom(
-                text = title,
-                modifier = Modifier.align(Alignment.Center),
-                fontSize = 20.sp,
-                maxLines = 1
-            )
+            title?.let {
+                TextCustom(
+                    text = title,
+                    modifier = Modifier.align(Alignment.Center),
+                    fontSize = 20.sp,
+                    maxLines = 1
+                )
+            }
             Row(modifier = Modifier.align(Alignment.CenterEnd)) {
                 onFetchClick?.let {
                     ClickableIcon(
