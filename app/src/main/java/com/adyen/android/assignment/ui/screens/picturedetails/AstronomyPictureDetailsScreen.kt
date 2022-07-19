@@ -37,13 +37,14 @@ fun AstronomyPictureDetailsScreen(
 
     val pictureDetails by viewModel.pictureDetails.observeAsState()
 
-    Column {
+    Box {
+        pictureDetails?.let { details -> PictureDetails(details = details) } ?: TextCustom(text = "No data")
+
         CustomTopAppBar(
             title = stringResource(id = R.string.our_universe),
+            isTransparent = true,
             onBackClick = { navController.popBackStack() }
         )
-
-        pictureDetails?.let { details -> PictureDetails(details = details) } ?: TextCustom(text = "No data")
     }
 }
 

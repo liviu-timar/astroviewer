@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,12 +24,13 @@ import com.adyen.android.assignment.ui.theme.BackgroundPrimary
 @Composable
 fun CustomTopAppBar(
     title: String,
+    isTransparent: Boolean = false,
     onBackClick: (() -> Unit)? = null,
     onFetchClick: (() -> Unit)? = null,
     onSortClick: (() -> Unit)? = null,
 ) {
     TopAppBar(
-        backgroundColor = BackgroundPrimary,
+        backgroundColor = if (isTransparent) Color.Transparent else BackgroundPrimary,
         elevation = 0.dp,
         contentPadding = PaddingValues(vertical = 5.dp)
     ) {
