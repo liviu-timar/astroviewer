@@ -1,6 +1,6 @@
 package com.adyen.android.assignment.data.sources
 
-import com.adyen.android.assignment.data.remote.PlanetaryService
+import com.adyen.android.assignment.data.api.PlanetaryService
 import com.adyen.android.assignment.utils.testPictureDtoList
 import com.adyen.android.assignment.utils.testPictureList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,23 +11,22 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.verify
-import org.mockito.kotlin.any
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AstronomyPictureRemoteDataSourceImplTest {
+class AstronomyPictureApiDataSourceTest {
 
     // SUT
-    private lateinit var dataSource: AstronomyPictureRemoteDataSourceImpl
+    private lateinit var dataSource: AstronomyPictureApiDataSource
     // Dependencies
     private lateinit var mockPlanetaryService: PlanetaryService
 
     @Before
     fun setUp() {
         mockPlanetaryService = mock()
-        dataSource = AstronomyPictureRemoteDataSourceImpl(mockPlanetaryService)
+        dataSource = AstronomyPictureApiDataSource(mockPlanetaryService)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult

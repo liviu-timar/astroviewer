@@ -1,10 +1,10 @@
-package com.adyen.android.assignment.data.local.dao
+package com.adyen.android.assignment.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.adyen.android.assignment.data.local.models.AstronomyPictureEntity
+import com.adyen.android.assignment.data.db.models.AstronomyPictureEntity
 
 @Dao
 interface AstronomyPictureDao {

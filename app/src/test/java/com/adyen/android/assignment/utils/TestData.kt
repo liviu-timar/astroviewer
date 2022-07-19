@@ -1,6 +1,6 @@
 package com.adyen.android.assignment.utils
 
-import com.adyen.android.assignment.data.remote.models.AstronomyPictureDto
+import com.adyen.android.assignment.data.api.models.AstronomyPictureDto
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import java.time.LocalDate
 

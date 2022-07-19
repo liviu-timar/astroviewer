@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.data.remote.models
+package com.adyen.android.assignment.data.api.models
 
 import com.adyen.android.assignment.domain.models.AstronomyPicture
 import com.squareup.moshi.Json

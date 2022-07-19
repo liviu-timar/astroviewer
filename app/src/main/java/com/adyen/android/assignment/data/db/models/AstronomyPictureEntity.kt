@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.data.local.models
+package com.adyen.android.assignment.data.db.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,6 +1,6 @@
 package com.adyen.android.assignment.di
 
-import com.adyen.android.assignment.data.remote.PlanetaryService
+import com.adyen.android.assignment.data.api.PlanetaryService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -9,7 +9,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RemoteDataModule {
+object ApiModule {
 
     @Provides
     @Singleton

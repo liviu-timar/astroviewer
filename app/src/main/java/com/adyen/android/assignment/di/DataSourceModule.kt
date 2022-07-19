@@ -1,7 +1,7 @@
 package com.adyen.android.assignment.di
 
-import com.adyen.android.assignment.data.sources.AstronomyPictureLocalDataSourceImpl
-import com.adyen.android.assignment.data.sources.AstronomyPictureRemoteDataSourceImpl
+import com.adyen.android.assignment.data.sources.AstronomyPictureDbDataSource
+import com.adyen.android.assignment.data.sources.AstronomyPictureApiDataSource
 import com.adyen.android.assignment.domain.sources.AstronomyPictureLocalDataSource
 import com.adyen.android.assignment.domain.sources.AstronomyPictureRemoteDataSource
 import dagger.Binds
@@ -15,11 +15,11 @@ abstract class DataSourceModule {
 
     @Binds
     abstract fun bindAstronomyPictureRemoteDataSource(
-        remoteDataSource: AstronomyPictureRemoteDataSourceImpl
+        remoteDataSource: AstronomyPictureApiDataSource
     ): AstronomyPictureRemoteDataSource
 
     @Binds
     abstract fun bindAstronomyPictureLocalDataSource(
-        remoteDataSource: AstronomyPictureLocalDataSourceImpl
+        remoteDataSource: AstronomyPictureDbDataSource
     ): AstronomyPictureLocalDataSource
 }

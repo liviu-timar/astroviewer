@@ -2,7 +2,7 @@ package com.adyen.android.assignment.di
 
 import android.content.Context
 import androidx.room.Room
-import com.adyen.android.assignment.data.local.AstronomyDatabase
+import com.adyen.android.assignment.data.db.AstronomyDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object LocalDataModule {
+object DbModule {
 
     @Provides
     @Singleton

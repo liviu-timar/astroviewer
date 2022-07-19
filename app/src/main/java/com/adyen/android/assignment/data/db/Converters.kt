@@ -1,4 +1,4 @@
-package com.adyen.android.assignment.data.local
+package com.adyen.android.assignment.data.db
 
 import androidx.room.TypeConverter
 import java.time.LocalDate
