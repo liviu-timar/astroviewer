@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -27,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.adyen.android.assignment.R
 import com.adyen.android.assignment.domain.usecases.SortBy
@@ -41,11 +42,12 @@ import com.adyen.android.assignment.ui.utils.hasNetworkConnection
 
 private const val PICTURE_COUNT = 15
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
     val context = LocalContext.current
     var hasNetworkConnection by rememberSaveable { mutableStateOf(context.hasNetworkConnection()) }
-    val pictureList by viewModel.pictures.observeAsState()
+    val pictureList by viewModel.pictures.collectAsStateWithLifecycle()
 
     if (viewModel.isDataFirstLoad) {
         if (hasNetworkConnection) {

@@ -1,7 +1,5 @@
 package com.adyen.android.assignment.ui.screens.picturelist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.adyen.android.assignment.domain.usecases.FormatDateUseCase
@@ -9,6 +7,8 @@ import com.adyen.android.assignment.domain.usecases.GetAstronomyPictureListUseCa
 import com.adyen.android.assignment.domain.usecases.SortBy
 import com.adyen.android.assignment.ui.screens.picturelist.models.PictureListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,8 +21,8 @@ class AstronomyPictureListViewModel @Inject constructor(
     var isDataFirstLoad: Boolean = true
     var sortPicturesBy = SortBy.DATE_DESC
 
-    private val _pictures = MutableLiveData<List<PictureListItem>>()
-    val pictures: LiveData<List<PictureListItem>> = _pictures
+    private val _pictures = MutableStateFlow<List<PictureListItem>?>(null)
+    val pictures = _pictures.asStateFlow()
 
     fun getPictureList(refresh: Boolean = true, count: Int, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
