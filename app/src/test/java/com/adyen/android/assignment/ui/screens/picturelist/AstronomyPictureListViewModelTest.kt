@@ -1,6 +1,5 @@
 package com.adyen.android.assignment.ui.screens.picturelist
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.adyen.android.assignment.domain.usecases.FormatDateUseCase
 import com.adyen.android.assignment.domain.usecases.GetAstronomyPictureListUseCase
 import com.adyen.android.assignment.domain.usecases.SortBy
@@ -20,15 +19,10 @@ import org.mockito.kotlin.whenever
 @OptIn(ExperimentalCoroutinesApi::class)
 class AstronomyPictureListViewModelTest {
 
-    // This rule swaps the background executor used by LiveData
-    // with a different one which executes each task synchronously
-    @get:Rule(order = 0)
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
     // Replaces Dispatchers.Main with a testing dispatcher because tests do not have a main Looper.
     // Used by viewModelScope.launch().
-    @get:Rule(order = 1)
-    val coroutinesTestRule = MainDispatcherRule()
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var viewModel: AstronomyPictureListViewModel
     private lateinit var mockGetAstronomyPictureListUseCase: GetAstronomyPictureListUseCase
@@ -43,14 +37,14 @@ class AstronomyPictureListViewModelTest {
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun picturesLiveData_pictureModelList_returnsPictureListItems() = runTest {
+    fun picturesFlow_pictureModelList_returnsPictureListItems() = runTest {
         // Given
         whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         // When
         viewModel.getPictureList(count = 2)
-        val pictures = viewModel.pictures.getOrAwaitValue()
+        val pictures = viewModel.pictures.value
 
         // Then
         assertThat(pictures, IsEqual(testPictureListItems)) // Verify state - variable value
@@ -65,7 +59,6 @@ class AstronomyPictureListViewModelTest {
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         viewModel.getPictureList(refresh, count, sortBy)
-        viewModel.pictures.getOrAwaitValue()
 
         verify(mockGetAstronomyPictureListUseCase).invoke(refresh, count, sortBy) // Verify behaviour - method calls
     }
