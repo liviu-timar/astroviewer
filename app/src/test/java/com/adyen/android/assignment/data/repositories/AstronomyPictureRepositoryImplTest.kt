@@ -3,12 +3,14 @@ package com.adyen.android.assignment.data.repositories
 import com.adyen.android.assignment.domain.repositories.AstronomyPictureRepository
 import com.adyen.android.assignment.domain.sources.AstronomyPictureLocalDataSource
 import com.adyen.android.assignment.domain.sources.AstronomyPictureRemoteDataSource
+import com.adyen.android.assignment.utils.MainDispatcherRule
 import com.adyen.android.assignment.utils.testPictureModelList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.*
 import org.mockito.kotlin.mock
@@ -16,6 +18,9 @@ import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class AstronomyPictureRepositoryImplTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule() // Replace Main dispatcher
 
     private lateinit var repository: AstronomyPictureRepository
     private lateinit var mockRemoteDataSource: AstronomyPictureRemoteDataSource
@@ -25,12 +30,16 @@ class AstronomyPictureRepositoryImplTest {
     fun setUp() {
         mockRemoteDataSource = mock()
         mockLocalDataSource = mock()
-        repository = AstronomyPictureRepositoryImpl(mockRemoteDataSource, mockLocalDataSource)
+        repository = AstronomyPictureRepositoryImpl(
+            mockRemoteDataSource,
+            mockLocalDataSource,
+            mainDispatcherRule.testDispatcher // Reuse the dispatcher that replaces Main
+        )
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun getPictures_refreshTrueAndCount_getsFromRemoteAndWritesToLocal() = runTest {
+    fun getPictures_refreshTrueAndCount_getsFromRemoteAndWritesToLocal() = runTest { // Takes scheduler from Main
         // Given
         val refresh = true
         val count = 2
