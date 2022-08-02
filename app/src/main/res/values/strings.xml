@@ -14,5 +14,7 @@
     <string name="cancel">Cancel</string>
     <string name="no_network_connection">No network connection</string>
     <string name="check_network_connection">Please check your network connection and try again.</string>
+    <string name="api_error">Something went wrong</string>
+    <string name="try_again_later">Please try again later.</string>
     <string name="try_again">Try Again</string>
 </resources>

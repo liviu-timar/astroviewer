@@ -5,11 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.adyen.android.assignment.domain.usecases.FormatDateUseCase
 import com.adyen.android.assignment.domain.usecases.GetAstronomyPictureListUseCase
 import com.adyen.android.assignment.domain.usecases.SortBy
-import com.adyen.android.assignment.ui.screens.picturelist.models.PictureListItem
+import com.squareup.moshi.JsonDataException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,24 +23,50 @@ class AstronomyPictureListViewModel @Inject constructor(
     var isDataFirstLoad: Boolean = true
     var sortPicturesBy = SortBy.DATE_DESC
 
-    private val _pictures = MutableStateFlow<List<PictureListItem>?>(null)
-    val pictures = _pictures.asStateFlow()
+    private val _uiState = MutableStateFlow(PictureListUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun getPictureList(refresh: Boolean = true, count: Int, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
-            _pictures.value = getAstronomyPictureListUseCase(refresh, count, sortBy)
-                .map { picture ->
-                    PictureListItem(
-                        id = picture.id,
-                        title = picture.title,
-                        date = formatDateUseCase(picture.date),
-                        url = picture.url
+            if (refresh) _uiState.update { PictureListUiState(isLoadingPictures = true) }
+
+            try {
+                val pictures = getAstronomyPictureListUseCase(refresh, count, sortBy)
+                _uiState.update {
+                    PictureListUiState(
+                        pictures = pictures.map { picture ->
+                            PictureListItemUiState(
+                                id = picture.id,
+                                title = picture.title,
+                                date = formatDateUseCase(picture.date),
+                                url = picture.url
+                            )
+                        }
                     )
                 }
+            } catch (e: IOException) { // Domain or data layer should catch these exceptions and throw custom ones for the UI layer to handle
+                _uiState.update { PictureListUiState(error = Error(isNetworkError = true))  }
+            } catch (e: JsonDataException) {
+                _uiState.update { PictureListUiState(error = Error(isApiError = true))  }
+            }
         }
     }
-
-    fun clearPictureList() {
-        _pictures.value = null
-    }
 }
+
+data class PictureListUiState(
+    val isLoadingPictures: Boolean = false,
+    val pictures: List<PictureListItemUiState> = listOf(),
+    val error: Error? = null
+)
+
+data class PictureListItemUiState(
+    val id: Int,
+    val title: String,
+    val date: String, // Formatted Date (string)
+    val url: String
+)
+
+data class Error(
+    val isNetworkError: Boolean = false,
+    val isApiError: Boolean = false
+)

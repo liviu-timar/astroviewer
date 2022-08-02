@@ -1,12 +1,12 @@
 package com.adyen.android.assignment.ui.utils
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.adyen.android.assignment.ui.screens.picturelist.models.PictureListItem
+import com.adyen.android.assignment.ui.screens.picturelist.PictureListItemUiState
 
-class PreviewPictureProvider : PreviewParameterProvider<PictureListItem> {
-    override val values: Sequence<PictureListItem>
+class PreviewPictureProvider : PreviewParameterProvider<PictureListItemUiState> {
+    override val values: Sequence<PictureListItemUiState>
         get() = sequenceOf(
-            PictureListItem(
+            PictureListItemUiState(
                 id = 1,
                 title = "Recycling Cassiopeia A",
                 date = "12 Jul 2002",
@@ -16,17 +16,17 @@ class PreviewPictureProvider : PreviewParameterProvider<PictureListItem> {
 
 }
 
-class PreviewPictureListProvider : PreviewParameterProvider<List<PictureListItem>> {
-    override val values: Sequence<List<PictureListItem>>
+class PreviewPictureListProvider : PreviewParameterProvider<List<PictureListItemUiState>> {
+    override val values: Sequence<List<PictureListItemUiState>>
         get() = sequenceOf(
             listOf(
-                PictureListItem(
+                PictureListItemUiState(
                     id = 1,
                     title = "Recycling Cassiopeia A",
                     date = "12 Jul 2002",
                     url = "https://apod.nasa.gov/apod/image/0207/casA_hst.jpg"
                 ),
-                PictureListItem(
+                PictureListItemUiState(
                     id = 2,
                     title = "Simulated Supergiant Star",
                     date = "22 Dec 2000",

@@ -44,7 +44,7 @@ class AstronomyPictureListViewModelTest {
 
         // When
         viewModel.getPictureList(count = 2)
-        val pictures = viewModel.pictures.value
+        val pictures = viewModel.uiState.value.pictures
 
         // Then
         assertThat(pictures, IsEqual(testPictureListItems)) // Verify state - variable value

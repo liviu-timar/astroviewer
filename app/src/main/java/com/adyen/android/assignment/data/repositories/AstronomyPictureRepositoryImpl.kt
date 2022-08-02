@@ -19,12 +19,7 @@ class AstronomyPictureRepositoryImpl @Inject constructor(
 
     override suspend fun getPictures(refresh: Boolean, count: Int): List<AstronomyPicture> = withContext(ioDispatcher) {
         if (refresh) {
-            val remotePictures = try {
-                remoteDataSource.getPictures(count)
-            } catch (e: Exception) {
-                localDataSource.getPictures(count)
-            }
-
+            val remotePictures = remoteDataSource.getPictures(count)
             localDataSource.deleteAllPictures()
             localDataSource.insertPictures(remotePictures)
         }

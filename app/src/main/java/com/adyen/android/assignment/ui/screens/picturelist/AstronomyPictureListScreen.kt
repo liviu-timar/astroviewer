@@ -16,7 +16,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -33,107 +32,93 @@ import com.adyen.android.assignment.R
 import com.adyen.android.assignment.domain.usecases.SortBy
 import com.adyen.android.assignment.ui.navigation.PictureRoutes
 import com.adyen.android.assignment.ui.screens.common.*
-import com.adyen.android.assignment.ui.screens.picturelist.models.PictureListItem
 import com.adyen.android.assignment.ui.theme.BackgroundSecondary
 import com.adyen.android.assignment.ui.theme.Primary
 import com.adyen.android.assignment.ui.utils.PreviewPictureListProvider
 import com.adyen.android.assignment.ui.utils.PreviewPictureProvider
-import com.adyen.android.assignment.ui.utils.hasNetworkConnection
 
 private const val PICTURE_COUNT = 15
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
-    val context = LocalContext.current
-    var hasNetworkConnection by rememberSaveable { mutableStateOf(context.hasNetworkConnection()) }
-    val pictureList by viewModel.pictures.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (viewModel.isDataFirstLoad) {
-        if (hasNetworkConnection) {
+    if (uiState.error != null) {
+        // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
+        val errorType = when {
+            uiState.error!!.isNetworkError -> ErrorType.NETWORK_ERROR
+            uiState.error!!.isApiError -> ErrorType.API_ERROR
+            else -> ErrorType.API_ERROR // We can also use an Unknown error type
+        }
+
+        Error(
+            errorType = errorType,
+            onTryAgain = { viewModel.getPictureList(count = PICTURE_COUNT) }
+        )
+    } else {
+        if (viewModel.isDataFirstLoad) {
             LaunchedEffect(key1 = Unit) {
                 viewModel.getPictureList(count = PICTURE_COUNT)
                 viewModel.isDataFirstLoad = false
             }
-
-            ScreenContent(
-                viewModel = viewModel,
-                navController = navController,
-                pictureList = pictureList,
-            )
-        } else {
-            // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
-            NoNetworkConnection(onTryAgain = { hasNetworkConnection = context.hasNetworkConnection() })
         }
-    } else {
-        ScreenContent(
-            viewModel = viewModel,
-            navController = navController,
-            pictureList = pictureList,
-        )
-    }
-}
 
-@Composable
-private fun ScreenContent(
-    viewModel: AstronomyPictureListViewModel,
-    navController: NavController,
-    pictureList: List<PictureListItem>?
-) {
-    var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
-
-    Column {
-        CustomTopAppBar(
-            title = stringResource(id = R.string.our_universe),
-            onFetchClick = {
-                viewModel.clearPictureList()
-                viewModel.getPictureList(
-                    refresh = true,
-                    count = PICTURE_COUNT,
-                    sortBy = viewModel.sortPicturesBy
-                )
-            },
-            onSortClick = { showSortPicturesDialog = true }
-        )
-
-        pictureList?.let { pictures ->
-            PictureList(
-                pictures = pictures,
-                onRowClick = { pictureId ->
-                    navController.navigate(
-                        PictureRoutes.PictureDetails.createRouteWithArgs(pictureId = pictureId)
+        Column {
+            CustomTopAppBar(
+                title = stringResource(id = R.string.our_universe),
+                onFetchClick = {
+                    viewModel.getPictureList(
+                        refresh = true,
+                        count = PICTURE_COUNT,
+                        sortBy = viewModel.sortPicturesBy
                     )
+                },
+                onSortClick = { showSortPicturesDialog = true }
+            )
+
+            if (uiState.isLoadingPictures) {
+                Shimmer { ShimmerPictureList(brush = this) }
+            } else {
+                PictureList(
+                    pictures = uiState.pictures,
+                    onRowClick = { pictureId ->
+                        navController.navigate(
+                            PictureRoutes.PictureDetails.createRouteWithArgs(pictureId = pictureId)
+                        )
+                    }
+                )
+            }
+        }
+
+        if (showSortPicturesDialog) {
+            var selectedSortOption by rememberSaveable { mutableStateOf(viewModel.sortPicturesBy) }
+
+            SortPicturesDialog(
+                sortBy = selectedSortOption,
+                onOptionClick = { clickedOption -> selectedSortOption = clickedOption },
+                onDismissClick = {
+                    selectedSortOption = viewModel.sortPicturesBy
+                    showSortPicturesDialog = false
+                },
+                onConfirmClick = { sortBy ->
+                    viewModel.getPictureList(
+                        refresh = false,
+                        count = PICTURE_COUNT,
+                        sortBy = sortBy
+                    )
+
+                    viewModel.sortPicturesBy = selectedSortOption
+                    showSortPicturesDialog = false
                 }
             )
-        } ?: Shimmer { ShimmerPictureList(brush = this) }
-    }
-
-    if (showSortPicturesDialog) {
-        var selectedSortOption by rememberSaveable { mutableStateOf(viewModel.sortPicturesBy) }
-
-        SortPicturesDialog(
-            sortBy = selectedSortOption,
-            onOptionClick = { clickedOption -> selectedSortOption = clickedOption },
-            onDismissClick = {
-                selectedSortOption = viewModel.sortPicturesBy
-                showSortPicturesDialog = false
-            },
-            onConfirmClick = { sortBy ->
-                viewModel.getPictureList(
-                    refresh = false,
-                    count = PICTURE_COUNT,
-                    sortBy = sortBy
-                )
-
-                viewModel.sortPicturesBy = selectedSortOption
-                showSortPicturesDialog = false
-            }
-        )
+        }
     }
 }
 
 @Composable
-private fun PictureList(pictures: List<PictureListItem>, onRowClick: (pictureId: Int) -> Unit) {
+private fun PictureList(pictures: List<PictureListItemUiState>, onRowClick: (pictureId: Int) -> Unit) {
     if (pictures.isNotEmpty()) {
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
@@ -150,7 +135,7 @@ private fun PictureList(pictures: List<PictureListItem>, onRowClick: (pictureId:
 }
 
 @Composable
-private fun PictureRow(picture: PictureListItem, onClick: (pictureId: Int) -> Unit) {
+private fun PictureRow(picture: PictureListItemUiState, onClick: (pictureId: Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -314,7 +299,16 @@ private fun DialogButton(isConfirmButton: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun NoNetworkConnection(onTryAgain: () -> Unit) {
+private fun Error(errorType: ErrorType, onTryAgain: () -> Unit) {
+    val error = when (errorType) {
+        ErrorType.NETWORK_ERROR -> {
+            Pair(R.string.no_network_connection, R.string.check_network_connection)
+        }
+        ErrorType.API_ERROR -> {
+            Pair(R.string.api_error, R.string.try_again_later)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -329,12 +323,12 @@ private fun NoNetworkConnection(onTryAgain: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(40.dp))
         TextCustomMedium(
-            text = stringResource(id = R.string.no_network_connection),
+            text = stringResource(id = error.first),
             fontSize = 20.sp
         )
         Spacer(modifier = Modifier.height(15.dp))
         TextCustom(
-            text = stringResource(id = R.string.check_network_connection),
+            text = stringResource(id = error.second),
             textAlign = TextAlign.Center,
             lineHeight = 25.sp
         )
@@ -346,15 +340,19 @@ private fun NoNetworkConnection(onTryAgain: () -> Unit) {
     }
 }
 
+enum class ErrorType {
+    NETWORK_ERROR, API_ERROR
+}
+
 @Preview(showBackground = true)
 @Composable
-fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: PictureListItem) {
+fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: PictureListItemUiState) {
     PictureRow(picture = picture, onClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<PictureListItem>) {
+fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<PictureListItemUiState>) {
     PictureList(pictures = pictureList, onRowClick = {})
 }
 

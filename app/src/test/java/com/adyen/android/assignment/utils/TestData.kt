@@ -2,7 +2,7 @@ package com.adyen.android.assignment.utils
 
 import com.adyen.android.assignment.data.api.models.AstronomyPictureDto
 import com.adyen.android.assignment.domain.models.AstronomyPicture
-import com.adyen.android.assignment.ui.screens.picturelist.models.PictureListItem
+import com.adyen.android.assignment.ui.screens.picturelist.PictureListItemUiState
 import java.time.LocalDate
 
 val testPictureModelList: List<AstronomyPicture>
@@ -50,13 +50,13 @@ val testPictureDtoList: List<AstronomyPictureDto>
 const val testDate = "01 Jan 2022"
 
 private val pictureListItems = listOf(
-    PictureListItem(
+    PictureListItemUiState(
         id = 0,
         title = "Picture 1",
         date = testDate,
         url = "http://url1"
     ),
-    PictureListItem(
+    PictureListItemUiState(
         id = 0,
         title = "Picture 2",
         date = testDate,
@@ -64,5 +64,5 @@ private val pictureListItems = listOf(
     ),
 )
 
-val testPictureListItems: List<PictureListItem>
+val testPictureListItems: List<PictureListItemUiState>
     get() = pictureListItems.map { it.copy() }
