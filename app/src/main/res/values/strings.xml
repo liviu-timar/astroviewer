@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Astro Viewer</string>
+    <string name="app_name">Astroviewer</string>
     <string name="warped">It\'s warped.</string>
     <string name="stars">Over 200 billion stars.</string>
     <string name="gassy">It\'s really dusty and gassy.</string>
