@@ -14,7 +14,7 @@ class PlanetaryServiceTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testResponseCode() = runTest {
-        val response = com.liviutimar.astroviewer.data.api.PlanetaryService.instance.getPictures()
+        val response = PlanetaryService.instance.getPictures()
         assert(response.isSuccessful)
     }
 }

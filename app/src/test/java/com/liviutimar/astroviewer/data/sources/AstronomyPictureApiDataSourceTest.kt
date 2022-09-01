@@ -21,7 +21,7 @@ class AstronomyPictureApiDataSourceTest {
     // SUT
     private lateinit var dataSource: AstronomyPictureApiDataSource
     // Dependencies
-    private lateinit var mockPlanetaryService: com.liviutimar.astroviewer.data.api.PlanetaryService
+    private lateinit var mockPlanetaryService: PlanetaryService
 
     @Before
     fun setUp() {
