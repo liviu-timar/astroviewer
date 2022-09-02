@@ -43,7 +43,7 @@ class AstronomyPictureListViewModelTest {
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         // When
-        viewModel.getPictureList(count = 2)
+        viewModel.getPictureList()
         val pictures = viewModel.uiState.value.pictures
 
         // Then
@@ -51,7 +51,7 @@ class AstronomyPictureListViewModelTest {
     }
 
     @Test
-    fun getPictureList_refreshAndCountAndSort_callsUseCase() = runTest {
+    fun getPictureList_refreshAndCountAndSortArgs_callsUseCaseWithSameArgs() = runTest {
         val refresh = true
         val count = 2
         val sortBy = SortBy.TITLE_ASC
