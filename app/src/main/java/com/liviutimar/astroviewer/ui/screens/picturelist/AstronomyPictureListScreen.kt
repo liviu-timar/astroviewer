@@ -37,8 +37,6 @@ import com.liviutimar.astroviewer.ui.theme.Primary
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureListProvider
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureProvider
 
-private const val PICTURE_COUNT = 15
-
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
@@ -55,25 +53,18 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 
         Error(
             errorType = errorType,
-            onTryAgain = { viewModel.getPictureList(count = PICTURE_COUNT) }
+            onTryAgain = { viewModel.getPictureList() }
         )
     } else {
-        if (viewModel.isDataFirstLoad) {
-            LaunchedEffect(key1 = Unit) {
-                viewModel.getPictureList(count = PICTURE_COUNT)
-                viewModel.isDataFirstLoad = false
-            }
+        if (uiState.isDataFirstLoad) {
+            LaunchedEffect(key1 = Unit) { viewModel.getPictureList() }
         }
 
         Column {
             CustomTopAppBar(
                 title = stringResource(id = R.string.our_universe),
                 onFetchClick = {
-                    viewModel.getPictureList(
-                        refresh = true,
-                        count = PICTURE_COUNT,
-                        sortBy = viewModel.sortPicturesBy
-                    )
+                    viewModel.getPictureList(refresh = true)
                 },
                 onSortClick = { showSortPicturesDialog = true }
             )
@@ -93,23 +84,17 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
         }
 
         if (showSortPicturesDialog) {
-            var selectedSortOption by rememberSaveable { mutableStateOf(viewModel.sortPicturesBy) }
+            var selectedSortOption by rememberSaveable { mutableStateOf(uiState.picturesSortedBy) }
 
             SortPicturesDialog(
                 sortBy = selectedSortOption,
                 onOptionClick = { clickedOption -> selectedSortOption = clickedOption },
-                onDismissClick = {
-                    selectedSortOption = viewModel.sortPicturesBy
-                    showSortPicturesDialog = false
-                },
-                onConfirmClick = { sortBy ->
+                onDismissClick = { showSortPicturesDialog = false },
+                onConfirmClick = {
                     viewModel.getPictureList(
                         refresh = false,
-                        count = PICTURE_COUNT,
-                        sortBy = sortBy
+                        sortBy = selectedSortOption
                     )
-
-                    viewModel.sortPicturesBy = selectedSortOption
                     showSortPicturesDialog = false
                 }
             )
@@ -189,7 +174,7 @@ private fun SortPicturesDialog(
     sortBy: SortBy,
     onOptionClick: (SortBy) -> Unit,
     onDismissClick: () -> Unit,
-    onConfirmClick: (SortBy) -> Unit,
+    onConfirmClick: () -> Unit,
 ) {
     Dialog(
         onDismissRequest = onDismissClick,
@@ -209,7 +194,7 @@ private fun DialogContent(
     sortBy: SortBy,
     onOptionClick: (SortBy) -> Unit,
     onDismissClick: () -> Unit,
-    onConfirmClick: (SortBy) -> Unit,
+    onConfirmClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -236,7 +221,7 @@ private fun DialogContent(
         Spacer(modifier = Modifier.height(40.dp))
         DialogButton(
             isConfirmButton = true,
-            onClick = { onConfirmClick(sortBy) }
+            onClick = { onConfirmClick() }
         )
         Spacer(modifier = Modifier.height(15.dp))
         DialogButton(

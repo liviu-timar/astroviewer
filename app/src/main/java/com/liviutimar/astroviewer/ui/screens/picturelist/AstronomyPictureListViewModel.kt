@@ -20,20 +20,23 @@ class AstronomyPictureListViewModel @Inject constructor(
     private val formatDateUseCase: FormatDateUseCase
 ) : ViewModel() {
 
-    var isDataFirstLoad: Boolean = true
-    var sortPicturesBy = SortBy.DATE_DESC
-
     private val _uiState = MutableStateFlow(PictureListUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun getPictureList(refresh: Boolean = true, count: Int, sortBy: SortBy = SortBy.DATE_DESC) {
+    fun getPictureList(refresh: Boolean = true, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
-            if (refresh) _uiState.update { PictureListUiState(isLoadingPictures = true) }
+            if (refresh) _uiState.update {
+                it.copy(
+                    isLoadingPictures = true,
+                    error = null
+                )
+            }
 
             try {
                 val pictures = getAstronomyPictureListUseCase(refresh, count, sortBy)
+
                 _uiState.update {
-                    PictureListUiState(
+                    it.copy(
                         pictures = pictures.map { picture ->
                             PictureListItemUiState(
                                 id = picture.id,
@@ -41,21 +44,37 @@ class AstronomyPictureListViewModel @Inject constructor(
                                 date = formatDateUseCase(picture.date),
                                 url = picture.url
                             )
-                        }
+                        },
+                        isDataFirstLoad = false,
+                        isLoadingPictures = false,
+                        picturesSortedBy = sortBy,
+                        error = null
                     )
                 }
             } catch (e: IOException) { // Domain or data layer should catch these exceptions and throw custom ones for the UI layer to handle
-                _uiState.update { PictureListUiState(error = Error(isNetworkError = true))  }
+                _uiState.update {
+                    it.copy(
+                        error = Error(isNetworkError = true),
+                        isLoadingPictures = false
+                    )
+                }
             } catch (e: JsonDataException) {
-                _uiState.update { PictureListUiState(error = Error(isApiError = true))  }
+                _uiState.update {
+                    it.copy(
+                        error = Error(isApiError = true),
+                        isLoadingPictures = false
+                    )
+                }
             }
         }
     }
 }
 
 data class PictureListUiState(
+    val isDataFirstLoad: Boolean = true,
     val isLoadingPictures: Boolean = false,
-    val pictures: List<PictureListItemUiState> = listOf(),
+    val pictures: List<PictureListItemUiState> = emptyList(),
+    val picturesSortedBy: SortBy = SortBy.DATE_DESC,
     val error: Error? = null
 )
 
@@ -70,3 +89,5 @@ data class Error(
     val isNetworkError: Boolean = false,
     val isApiError: Boolean = false
 )
+
+private const val PICTURE_COUNT = 15
