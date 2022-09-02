@@ -43,19 +43,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (uiState.error != null) {
-        // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
-        val errorType = when {
-            uiState.error!!.isNetworkError -> ErrorType.NETWORK_ERROR
-            uiState.error!!.isApiError -> ErrorType.API_ERROR
-            else -> ErrorType.API_ERROR // We can also use an Unknown error type
-        }
-
-        Error(
-            errorType = errorType,
-            onTryAgain = { viewModel.getPictureList() }
-        )
-    } else {
+    if (uiState.error == null) {
         if (uiState.isDataFirstLoad) {
             LaunchedEffect(key1 = Unit) { viewModel.getPictureList() }
         }
@@ -99,6 +87,18 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
                 }
             )
         }
+    } else {
+        // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
+        val errorType = when {
+            uiState.error!!.isNetworkError -> ErrorType.NETWORK_ERROR
+            uiState.error!!.isApiError -> ErrorType.API_ERROR
+            else -> ErrorType.API_ERROR // We can also use an Unknown error type
+        }
+
+        Error(
+            errorType = errorType,
+            onTryAgain = { viewModel.getPictureList() }
+        )
     }
 }
 
