@@ -14,6 +14,12 @@ Astroviewer allows you to view pictures that the [NASA Astronomy Picture of the 
 - Kotlin Flow
 - Tests
 
+- To do
+    - Migrate Details to Flow
+    - Improve Details UI state management
+    - Visual feedback for button clicks (reconsider ripple effect)
+    - Fixes for various edge cases 
+
 ### Screens
 | List Screen                                          | Sort Dialog                                          | Details Screen                                          |
 | ---------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------- |
