@@ -1,6 +1,6 @@
 package com.liviutimar.astroviewer.utils
 
-import com.liviutimar.astroviewer.data.api.models.AstronomyPictureDto
+import com.liviutimar.astroviewer.data.api.dto.AstronomyPictureDto
 import com.liviutimar.astroviewer.domain.models.AstronomyPicture
 import com.liviutimar.astroviewer.ui.screens.picturelist.PictureListItemUiState
 import java.time.LocalDate

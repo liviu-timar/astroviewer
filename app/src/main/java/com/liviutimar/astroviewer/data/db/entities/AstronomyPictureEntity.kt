@@ -1,4 +1,4 @@
-package com.liviutimar.astroviewer.data.db.models
+package com.liviutimar.astroviewer.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

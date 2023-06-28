@@ -1,9 +1,9 @@
 package com.liviutimar.astroviewer.data.sources
 
 import com.liviutimar.astroviewer.data.db.dao.AstronomyPictureDao
-import com.liviutimar.astroviewer.data.db.models.AstronomyPictureEntity
-import com.liviutimar.astroviewer.data.db.models.asDomainModel
-import com.liviutimar.astroviewer.data.db.models.asEntity
+import com.liviutimar.astroviewer.data.db.entities.AstronomyPictureEntity
+import com.liviutimar.astroviewer.data.db.entities.asDomainModel
+import com.liviutimar.astroviewer.data.db.entities.asEntity
 import com.liviutimar.astroviewer.domain.models.AstronomyPicture
 import com.liviutimar.astroviewer.domain.sources.AstronomyPictureLocalDataSource
 import javax.inject.Inject

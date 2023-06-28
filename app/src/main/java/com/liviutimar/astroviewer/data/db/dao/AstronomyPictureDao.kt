@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.liviutimar.astroviewer.data.db.models.AstronomyPictureEntity
+import com.liviutimar.astroviewer.data.db.entities.AstronomyPictureEntity
 
 @Dao
 interface AstronomyPictureDao {

@@ -2,7 +2,7 @@ package com.liviutimar.astroviewer.data.api
 
 import com.liviutimar.astroviewer.BuildConfig
 import com.liviutimar.astroviewer.data.api.adapters.DayAdapter
-import com.liviutimar.astroviewer.data.api.models.AstronomyPictureDto
+import com.liviutimar.astroviewer.data.api.dto.AstronomyPictureDto
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Response

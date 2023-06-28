@@ -1,4 +1,4 @@
-package com.liviutimar.astroviewer.data.api.models
+package com.liviutimar.astroviewer.data.api.dto
 
 import com.liviutimar.astroviewer.domain.models.AstronomyPicture
 import com.squareup.moshi.Json
