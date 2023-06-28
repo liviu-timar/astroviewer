@@ -29,12 +29,7 @@ class AstronomyPictureListViewModel @Inject constructor(
 
     fun getPictureList(refresh: Boolean, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
-            if (refresh) _uiState.update {
-                it.copy(
-                    isLoadingPictures = true,
-                    error = null
-                )
-            }
+            if (refresh) _uiState.update { it.copy(isLoading = true, error = null) }
 
             try {
                 val pictures = getAstronomyPictureListUseCase(refresh, count, sortBy)
@@ -49,8 +44,8 @@ class AstronomyPictureListViewModel @Inject constructor(
                                 url = picture.url
                             )
                         },
-                        isLoadingPictures = false,
-                        picturesSortedBy = sortBy,
+                        isLoading = false,
+                        sortBy = sortBy,
                         error = null
                     )
                 }
@@ -58,14 +53,14 @@ class AstronomyPictureListViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         error = Error(isNetworkError = true),
-                        isLoadingPictures = false
+                        isLoading = false
                     )
                 }
             } catch (e: JsonDataException) {
                 _uiState.update {
                     it.copy(
                         error = Error(isApiError = true),
-                        isLoadingPictures = false
+                        isLoading = false
                     )
                 }
             }
@@ -74,9 +69,9 @@ class AstronomyPictureListViewModel @Inject constructor(
 }
 
 data class PictureListUiState(
-    val isLoadingPictures: Boolean = false,
+    val isLoading: Boolean = false,
     val pictures: List<PictureListItemUiState> = emptyList(),
-    val picturesSortedBy: SortBy = SortBy.DATE_DESC,
+    val sortBy: SortBy = SortBy.DATE_DESC,
     val error: Error? = null
 )
 

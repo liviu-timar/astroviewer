@@ -53,7 +53,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
                 onSortClick = { showSortPicturesDialog = true }
             )
 
-            if (uiState.isLoadingPictures) {
+            if (uiState.isLoading) {
                 Shimmer { ShimmerPictureList(brush = this) }
             } else {
                 PictureList(
@@ -68,7 +68,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
         }
 
         if (showSortPicturesDialog) {
-            var selectedSortOption by remember { mutableStateOf(uiState.picturesSortedBy) }
+            var selectedSortOption by remember { mutableStateOf(uiState.sortBy) }
 
             SortPicturesDialog(
                 sortBy = selectedSortOption,
