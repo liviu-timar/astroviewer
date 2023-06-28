@@ -45,7 +45,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 
     if (uiState.error == null) {
         if (uiState.isDataFirstLoad) {
-            LaunchedEffect(key1 = Unit) { viewModel.getPictureList() }
+            LaunchedEffect(key1 = Unit) { viewModel.getPictureList(refresh = true) }
         }
 
         Column {
@@ -95,7 +95,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 
         Error(
             errorType = errorType,
-            onTryAgain = { viewModel.getPictureList() }
+            onTryAgain = { viewModel.getPictureList(refresh = true) }
         )
     }
 }

@@ -43,7 +43,7 @@ class AstronomyPictureListViewModelTest {
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         // When
-        viewModel.getPictureList()
+        viewModel.getPictureList(refresh = true)
         val pictures = viewModel.uiState.value.pictures
 
         // Then

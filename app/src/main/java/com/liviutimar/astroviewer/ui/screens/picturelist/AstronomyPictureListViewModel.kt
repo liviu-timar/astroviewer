@@ -23,7 +23,7 @@ class AstronomyPictureListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PictureListUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun getPictureList(refresh: Boolean = true, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
+    fun getPictureList(refresh: Boolean, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
             if (refresh) _uiState.update {
                 it.copy(
