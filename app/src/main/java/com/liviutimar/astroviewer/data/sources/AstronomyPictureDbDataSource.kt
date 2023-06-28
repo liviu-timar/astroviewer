@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class AstronomyPictureDbDataSource @Inject constructor(
     private val astronomyPictureDao: AstronomyPictureDao
-): AstronomyPictureLocalDataSource {
+) : AstronomyPictureLocalDataSource {
 
     override suspend fun getPictures(count: Int): List<AstronomyPicture> =
         astronomyPictureDao.get(count = count).map(AstronomyPictureEntity::asDomainModel)

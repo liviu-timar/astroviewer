@@ -22,7 +22,7 @@ Astroviewer allows you to view pictures that the [NASA Astronomy Picture of the 
 
 ### Screens
 | List Screen                                          | Sort Dialog                                          | Details Screen                                          |
-| ---------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------- |
+|------------------------------------------------------|------------------------------------------------------|---------------------------------------------------------|
 | <img src="/screens/List%20Screen.png" width="260" /> | <img src="/screens/Sort%20Dialog.png" width="260" /> | <img src="/screens/Details%20Screen.png" width="260" /> |
 
 ... and more soon.

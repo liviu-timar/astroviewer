@@ -51,9 +51,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
         Column {
             CustomTopAppBar(
                 title = stringResource(id = R.string.our_universe),
-                onFetchClick = {
-                    viewModel.getPictureList(refresh = true)
-                },
+                onFetchClick = { viewModel.getPictureList(refresh = true) },
                 onSortClick = { showSortPicturesDialog = true }
             )
 
