@@ -6,36 +6,33 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.liviutimar.astroviewer.ui.screens.common.AstronomyImage
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
-import com.liviutimar.astroviewer.ui.screens.picturedetails.models.PictureDetails
 
+@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AstronomyPictureDetailsScreen(
     viewModel: AstronomyPictureDetailsViewModel,
     navController: NavController,
     pictureId: Int,
 ) {
-    if (pictureId != 0) {
-        LaunchedEffect(key1 = Unit) {
-            viewModel.getPictureDetails(pictureId)
-        }
-    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val pictureDetails by viewModel.pictureDetails.observeAsState()
+    if (pictureId != 0) LaunchedEffect(key1 = Unit) { viewModel.getPictureDetails(pictureId) }
 
     Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        pictureDetails?.let { details -> PictureDetails(details = details) } ?: TextCustom(text = "No data")
+        uiState.details?.let { PictureDetails(details = it) } ?: TextCustom(text = "No data")
 
         CustomTopAppBar(
             isTransparent = true,

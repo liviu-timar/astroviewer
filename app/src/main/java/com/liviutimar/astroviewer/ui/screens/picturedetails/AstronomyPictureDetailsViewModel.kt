@@ -1,13 +1,12 @@
 package com.liviutimar.astroviewer.ui.screens.picturedetails
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
 import com.liviutimar.astroviewer.domain.usecases.GetAstronomyPictureDetailsUseCase
-import com.liviutimar.astroviewer.ui.screens.picturedetails.models.PictureDetails
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,19 +16,32 @@ class AstronomyPictureDetailsViewModel @Inject constructor(
     private val formatDateUseCase: FormatDateUseCase
 ) : ViewModel() {
 
-    private val _pictureDetails = MutableLiveData<PictureDetails>()
-    val pictureDetails: LiveData<PictureDetails> = _pictureDetails
+    private val _uiState = MutableStateFlow(PictureDetailsUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun getPictureDetails(pictureId: Int) {
         viewModelScope.launch {
-            _pictureDetails.value = getAstronomyPictureDetailsUseCase(pictureId).let { picture ->
-                PictureDetails(
-                    title = picture.title,
-                    desc = picture.desc,
-                    date = formatDateUseCase(picture.date),
-                    url = picture.url
+            getAstronomyPictureDetailsUseCase(pictureId).let {
+                _uiState.value = PictureDetailsUiState(
+                    details = PictureDetails(
+                        title = it.title,
+                        desc = it.desc,
+                        date = formatDateUseCase(it.date),
+                        url = it.url
+                    )
                 )
             }
         }
     }
 }
+
+data class PictureDetailsUiState(
+    val details: PictureDetails? = null,
+)
+
+data class PictureDetails(
+    val title: String = "",
+    val desc: String = "",
+    val date: String = "",
+    val url: String = ""
+)
