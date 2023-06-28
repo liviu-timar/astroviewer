@@ -23,6 +23,10 @@ class AstronomyPictureListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PictureListUiState())
     val uiState = _uiState.asStateFlow()
 
+    init {
+        getPictureList(refresh = true)
+    }
+
     fun getPictureList(refresh: Boolean, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
             if (refresh) _uiState.update {
@@ -45,7 +49,6 @@ class AstronomyPictureListViewModel @Inject constructor(
                                 url = picture.url
                             )
                         },
-                        isDataFirstLoad = false,
                         isLoadingPictures = false,
                         picturesSortedBy = sortBy,
                         error = null
@@ -71,7 +74,6 @@ class AstronomyPictureListViewModel @Inject constructor(
 }
 
 data class PictureListUiState(
-    val isDataFirstLoad: Boolean = true,
     val isLoadingPictures: Boolean = false,
     val pictures: List<PictureListItemUiState> = emptyList(),
     val picturesSortedBy: SortBy = SortBy.DATE_DESC,

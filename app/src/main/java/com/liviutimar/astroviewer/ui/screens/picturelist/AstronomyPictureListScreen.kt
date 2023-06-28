@@ -46,10 +46,6 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
     if (uiState.error == null) {
-        if (uiState.isDataFirstLoad) {
-            LaunchedEffect(key1 = Unit) { viewModel.getPictureList(refresh = true) }
-        }
-
         Column {
             CustomTopAppBar(
                 title = stringResource(id = R.string.our_universe),
