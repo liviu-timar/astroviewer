@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -33,6 +34,7 @@ import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.screens.common.*
 import com.liviutimar.astroviewer.ui.theme.BackgroundSecondary
+import com.liviutimar.astroviewer.ui.theme.NoRippleTheme
 import com.liviutimar.astroviewer.ui.theme.Primary
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureListProvider
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureProvider
@@ -255,20 +257,23 @@ private fun DialogOption(label: String, selected: Boolean, onClick: () -> Unit) 
             modifier = Modifier.fillMaxWidth(),
             maxLines = 1
         )
-        RadioButton(
-            selected = selected,
-            modifier = Modifier
-                .size(20.dp)
-                .indication(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ),
-            onClick = onClick,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = Primary,
-                unselectedColor = Color.White,
+        // Use CompositionLocal to disable the ripple effect for the RadioButton
+        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+            RadioButton(
+                selected = selected,
+                modifier = Modifier
+                    .size(20.dp)
+                    .indication(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ),
+                onClick = onClick,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = Primary,
+                    unselectedColor = Color.White,
+                )
             )
-        )
+        }
     }
 }
 

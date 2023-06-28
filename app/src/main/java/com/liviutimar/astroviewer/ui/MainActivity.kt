@@ -29,10 +29,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    // Use CompositionLocal to disable the ripple effect down the Composition tree
-                    CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-                        MainComposable()
-                    }
+                    MainComposable()
                 }
             }
         }
