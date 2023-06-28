@@ -70,7 +70,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
         }
 
         if (showSortPicturesDialog) {
-            var selectedSortOption by rememberSaveable { mutableStateOf(uiState.picturesSortedBy) }
+            var selectedSortOption by remember { mutableStateOf(uiState.picturesSortedBy) }
 
             SortPicturesDialog(
                 sortBy = selectedSortOption,
