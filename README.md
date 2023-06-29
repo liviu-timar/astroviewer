@@ -15,9 +15,13 @@ Astroviewer allows you to view pictures that the [NASA Astronomy Picture of the 
 - Tests
 
 - To do
-    - Migrate Details to Flow
-    - Improve Details UI state management
-    - Visual feedback for button clicks (reconsider ripple effect)
+    - Migrate Details to Flow :white_check_mark:
+    - Improve Details UI state management :white_check_mark:
+    - Visual feedback for button clicks (reconsider ripple effect) :white_check_mark:
+    - Simplify naming for various types :white_check_mark:
+    - Let users mark pictures as favourite & save favourites locally
+    - Create cool animation for "Mark as Favourite" icon
+    - Use streams of data (from Room to UI) instead of one-shot requests where possible (observe data instead of requesting it)
     - Fixes for various edge cases 
 
 ### Screens
