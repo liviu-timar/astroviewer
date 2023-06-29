@@ -15,15 +15,15 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.liviutimar.astroviewer.ui.screens.common.AstronomyImage
+import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun AstronomyPictureDetailsScreen(
-    viewModel: AstronomyPictureDetailsViewModel,
+fun PictureDetailsScreen(
+    viewModel: PictureDetailsViewModel,
     navController: NavController,
     pictureId: Int,
 ) {
@@ -59,7 +59,7 @@ private fun PictureDetails(details: PictureDetails) {
 private fun Image(url: String) {
     val blackColorPainter = remember { ColorPainter(color = Color.Black) }
 
-    AstronomyImage(
+    NetworkImage(
         url = url,
         modifier = Modifier
             .fillMaxWidth()

@@ -1,8 +1,8 @@
 package com.liviutimar.astroviewer.data.repositories
 
-import com.liviutimar.astroviewer.domain.repositories.AstronomyPictureRepository
-import com.liviutimar.astroviewer.domain.sources.AstronomyPictureLocalDataSource
-import com.liviutimar.astroviewer.domain.sources.AstronomyPictureRemoteDataSource
+import com.liviutimar.astroviewer.domain.repositories.PictureRepository
+import com.liviutimar.astroviewer.domain.sources.PictureLocalDataSource
+import com.liviutimar.astroviewer.domain.sources.PictureRemoteDataSource
 import com.liviutimar.astroviewer.utils.MainDispatcherRule
 import com.liviutimar.astroviewer.utils.testPictureModelList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,20 +17,20 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AstronomyPictureRepositoryImplTest {
+class PictureRepositoryImplTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule() // Replace Main dispatcher
 
-    private lateinit var repository: AstronomyPictureRepository
-    private lateinit var mockRemoteDataSource: AstronomyPictureRemoteDataSource
-    private lateinit var mockLocalDataSource: AstronomyPictureLocalDataSource
+    private lateinit var repository: PictureRepository
+    private lateinit var mockRemoteDataSource: PictureRemoteDataSource
+    private lateinit var mockLocalDataSource: PictureLocalDataSource
 
     @Before
     fun setUp() {
         mockRemoteDataSource = mock()
         mockLocalDataSource = mock()
-        repository = AstronomyPictureRepositoryImpl(
+        repository = PictureRepositoryImpl(
             mockRemoteDataSource,
             mockLocalDataSource,
             mainDispatcherRule.testDispatcher // Reuse the dispatcher that replaces Main

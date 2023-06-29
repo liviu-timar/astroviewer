@@ -16,17 +16,17 @@ import org.mockito.kotlin.whenever
 import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AstronomyPictureApiDataSourceTest {
+class PictureApiDataSourceTest {
 
     // SUT
-    private lateinit var dataSource: AstronomyPictureApiDataSource
+    private lateinit var dataSource: PictureApiDataSource
     // Dependencies
     private lateinit var mockPlanetaryService: PlanetaryService
 
     @Before
     fun setUp() {
         mockPlanetaryService = mock()
-        dataSource = AstronomyPictureApiDataSource(mockPlanetaryService)
+        dataSource = PictureApiDataSource(mockPlanetaryService)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult

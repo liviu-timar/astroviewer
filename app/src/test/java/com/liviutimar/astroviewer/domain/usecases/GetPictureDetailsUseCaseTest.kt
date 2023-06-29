@@ -1,6 +1,6 @@
 package com.liviutimar.astroviewer.domain.usecases
 
-import com.liviutimar.astroviewer.domain.repositories.AstronomyPictureRepository
+import com.liviutimar.astroviewer.domain.repositories.PictureRepository
 import com.liviutimar.astroviewer.utils.testPictureModelList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -14,15 +14,15 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetAstronomyPictureDetailsUseCaseTest {
+class GetPictureDetailsUseCaseTest {
 
-    private lateinit var useCase: GetAstronomyPictureDetailsUseCase
-    private lateinit var mockPictureRepository: AstronomyPictureRepository
+    private lateinit var useCase: GetPictureDetailsUseCase
+    private lateinit var mockPictureRepository: PictureRepository
 
     @Before
     fun setUp() {
         mockPictureRepository = mock()
-        useCase = GetAstronomyPictureDetailsUseCase(mockPictureRepository)
+        useCase = GetPictureDetailsUseCase(mockPictureRepository)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult

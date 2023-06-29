@@ -1,7 +1,7 @@
 package com.liviutimar.astroviewer.ui.screens.picturelist
 
 import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
-import com.liviutimar.astroviewer.domain.usecases.GetAstronomyPictureListUseCase
+import com.liviutimar.astroviewer.domain.usecases.GetPictureListUseCase
 import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.liviutimar.astroviewer.utils.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,29 +17,29 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AstronomyPictureListViewModelTest {
+class PictureListViewModelTest {
 
     // Replaces Dispatchers.Main with a testing dispatcher because tests do not have a main Looper.
     // Used by viewModelScope.launch().
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var viewModel: AstronomyPictureListViewModel
-    private lateinit var mockGetAstronomyPictureListUseCase: GetAstronomyPictureListUseCase
+    private lateinit var viewModel: PictureListViewModel
+    private lateinit var mockGetPictureListUseCase: GetPictureListUseCase
     private lateinit var mockFormatDateUseCase: FormatDateUseCase
 
     @Before
     fun setUp() {
-        mockGetAstronomyPictureListUseCase = mock()
+        mockGetPictureListUseCase = mock()
         mockFormatDateUseCase = mock()
-        viewModel = AstronomyPictureListViewModel(mockGetAstronomyPictureListUseCase, mockFormatDateUseCase)
+        viewModel = PictureListViewModel(mockGetPictureListUseCase, mockFormatDateUseCase)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
     fun picturesFlow_pictureModelList_returnsPictureListItems() = runTest {
         // Given
-        whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
+        whenever(mockGetPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         // When
@@ -55,11 +55,11 @@ class AstronomyPictureListViewModelTest {
         val refresh = true
         val count = 2
         val sortBy = SortBy.TITLE_ASC
-        whenever(mockGetAstronomyPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
+        whenever(mockGetPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
         whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         viewModel.getPictureList(refresh, count, sortBy)
 
-        verify(mockGetAstronomyPictureListUseCase).invoke(refresh, count, sortBy) // Verify behaviour - method calls
+        verify(mockGetPictureListUseCase).invoke(refresh, count, sortBy) // Verify behaviour - method calls
     }
 }

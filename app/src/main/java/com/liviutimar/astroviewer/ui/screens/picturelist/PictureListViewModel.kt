@@ -3,7 +3,7 @@ package com.liviutimar.astroviewer.ui.screens.picturelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
-import com.liviutimar.astroviewer.domain.usecases.GetAstronomyPictureListUseCase
+import com.liviutimar.astroviewer.domain.usecases.GetPictureListUseCase
 import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.squareup.moshi.JsonDataException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,8 +15,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class AstronomyPictureListViewModel @Inject constructor(
-    private val getAstronomyPictureListUseCase: GetAstronomyPictureListUseCase,
+class PictureListViewModel @Inject constructor(
+    private val getPictureListUseCase: GetPictureListUseCase,
     private val formatDateUseCase: FormatDateUseCase
 ) : ViewModel() {
 
@@ -32,7 +32,7 @@ class AstronomyPictureListViewModel @Inject constructor(
             if (refresh) _uiState.update { it.copy(isLoading = true, error = null) }
 
             try {
-                val pictures = getAstronomyPictureListUseCase(refresh, count, sortBy)
+                val pictures = getPictureListUseCase(refresh, count, sortBy)
 
                 _uiState.update {
                     it.copy(

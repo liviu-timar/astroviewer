@@ -3,7 +3,7 @@ package com.liviutimar.astroviewer.ui.screens.picturedetails
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
-import com.liviutimar.astroviewer.domain.usecases.GetAstronomyPictureDetailsUseCase
+import com.liviutimar.astroviewer.domain.usecases.GetPictureDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,8 +11,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AstronomyPictureDetailsViewModel @Inject constructor(
-    private val getAstronomyPictureDetailsUseCase: GetAstronomyPictureDetailsUseCase,
+class PictureDetailsViewModel @Inject constructor(
+    private val getPictureDetailsUseCase: GetPictureDetailsUseCase,
     private val formatDateUseCase: FormatDateUseCase
 ) : ViewModel() {
 
@@ -21,7 +21,7 @@ class AstronomyPictureDetailsViewModel @Inject constructor(
 
     fun getPictureDetails(pictureId: Int) {
         viewModelScope.launch {
-            getAstronomyPictureDetailsUseCase(pictureId).let {
+            getPictureDetailsUseCase(pictureId).let {
                 _uiState.value = PictureDetailsUiState(
                     details = PictureDetails(
                         title = it.title,

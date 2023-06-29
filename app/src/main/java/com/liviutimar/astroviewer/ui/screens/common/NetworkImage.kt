@@ -10,7 +10,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 
 @Composable
-fun AstronomyImage(
+fun NetworkImage(
     url: String,
     modifier: Modifier = Modifier,
     crossfadeMillis: Int = 0,

@@ -1,21 +1,21 @@
 package com.liviutimar.astroviewer.utils
 
-import com.liviutimar.astroviewer.data.api.dto.AstronomyPictureDto
-import com.liviutimar.astroviewer.domain.models.AstronomyPicture
+import com.liviutimar.astroviewer.data.api.dto.PictureDto
+import com.liviutimar.astroviewer.domain.models.Picture
 import com.liviutimar.astroviewer.ui.screens.picturelist.PictureListItemUiState
 import java.time.LocalDate
 
-val testPictureModelList: List<AstronomyPicture>
+val testPictureModelList: List<Picture>
     get() = pictureModelList.map { it.copy() }
 
 private val pictureModelList = listOf(
-    AstronomyPicture(
+    Picture(
         title = "Picture 1",
         desc = "Cool first picture",
         date = LocalDate.parse("2022-07-11"),
         url = "http://url1"
     ),
-    AstronomyPicture(
+    Picture(
         title = "Picture 2",
         desc = "Cool second picture",
         date = LocalDate.parse("2022-08-12"),
@@ -24,7 +24,7 @@ private val pictureModelList = listOf(
 )
 
 private val pictureDtoList = listOf(
-    AstronomyPictureDto(
+    PictureDto(
         serviceVersion = "1",
         title = "Picture 1",
         explanation = "Cool first picture",
@@ -33,7 +33,7 @@ private val pictureDtoList = listOf(
         hdUrl = "http://hdurl1",
         url = "http://url1"
     ),
-    AstronomyPictureDto(
+    PictureDto(
         serviceVersion = "1",
         title = "Picture 2",
         explanation = "Cool second picture",
@@ -44,7 +44,7 @@ private val pictureDtoList = listOf(
     )
 )
 
-val testPictureDtoList: List<AstronomyPictureDto>
+val testPictureDtoList: List<PictureDto>
     get() = pictureDtoList.map { it.copy() }
 
 const val testDate = "01 Jan 2022"

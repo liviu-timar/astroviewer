@@ -41,7 +41,7 @@ import com.liviutimar.astroviewer.ui.utils.PreviewPictureProvider
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
+fun PictureListScreen(viewModel: PictureListViewModel, navController: NavController) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -135,7 +135,7 @@ private fun PictureRow(picture: PictureListItemUiState, onClick: (pictureId: Int
 
 @Composable
 private fun PictureImage(url: String) {
-    AstronomyImage(
+    NetworkImage(
         url = url,
         modifier = Modifier
             .size(40.dp)
