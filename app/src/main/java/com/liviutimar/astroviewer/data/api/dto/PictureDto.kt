@@ -1,10 +1,10 @@
-package com.liviutimar.astroviewer.data.api.models
+package com.liviutimar.astroviewer.data.api.dto
 
-import com.liviutimar.astroviewer.domain.models.AstronomyPicture
+import com.liviutimar.astroviewer.domain.models.Picture
 import com.squareup.moshi.Json
 import java.time.LocalDate
 
-data class AstronomyPictureDto(
+data class PictureDto(
     @Json(name = "service_version") val serviceVersion: String,
     val title: String,
     val explanation: String,
@@ -14,7 +14,7 @@ data class AstronomyPictureDto(
     val url: String,
 )
 
-fun AstronomyPictureDto.asDomainModel() = AstronomyPicture(
+fun PictureDto.asDomainModel() = Picture(
     title = title,
     desc = explanation,
     date = date,

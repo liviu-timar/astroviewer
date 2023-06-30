@@ -2,7 +2,7 @@ package com.liviutimar.astroviewer.data.api
 
 import com.liviutimar.astroviewer.BuildConfig
 import com.liviutimar.astroviewer.data.api.adapters.DayAdapter
-import com.liviutimar.astroviewer.data.api.models.AstronomyPictureDto
+import com.liviutimar.astroviewer.data.api.dto.PictureDto
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Response
@@ -17,7 +17,7 @@ interface PlanetaryService {
      * See [the docs](https://api.nasa.gov/) and [github micro service](https://github.com/nasa/apod-api#docs-)
      */
     @GET("planetary/apod?api_key=${BuildConfig.API_KEY}")
-    suspend fun getPictures(@Query("count") count: Int = 20): Response<List<AstronomyPictureDto>>
+    suspend fun getPictures(@Query("count") count: Int = 20): Response<List<PictureDto>>
 
     companion object {
 

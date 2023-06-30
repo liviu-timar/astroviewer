@@ -1,9 +1,9 @@
 package com.liviutimar.astroviewer.di
 
-import com.liviutimar.astroviewer.data.sources.AstronomyPictureDbDataSource
-import com.liviutimar.astroviewer.data.sources.AstronomyPictureApiDataSource
-import com.liviutimar.astroviewer.domain.sources.AstronomyPictureLocalDataSource
-import com.liviutimar.astroviewer.domain.sources.AstronomyPictureRemoteDataSource
+import com.liviutimar.astroviewer.data.sources.PictureDbDataSource
+import com.liviutimar.astroviewer.data.sources.PictureApiDataSource
+import com.liviutimar.astroviewer.domain.sources.PictureLocalDataSource
+import com.liviutimar.astroviewer.domain.sources.PictureRemoteDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,12 +14,12 @@ import dagger.hilt.components.SingletonComponent
 abstract class DataSourceModule {
 
     @Binds
-    abstract fun bindAstronomyPictureRemoteDataSource(
-        remoteDataSource: AstronomyPictureApiDataSource
-    ): AstronomyPictureRemoteDataSource
+    abstract fun bindPictureRemoteDataSource(
+        remoteDataSource: PictureApiDataSource
+    ): PictureRemoteDataSource
 
     @Binds
-    abstract fun bindAstronomyPictureLocalDataSource(
-        localDataSource: AstronomyPictureDbDataSource
-    ): AstronomyPictureLocalDataSource
+    abstract fun bindPictureLocalDataSource(
+        localDataSource: PictureDbDataSource
+    ): PictureLocalDataSource
 }

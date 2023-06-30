@@ -2,7 +2,7 @@ package com.liviutimar.astroviewer.domain.models
 
 import java.time.LocalDate
 
-data class AstronomyPicture(
+data class Picture(
     val id: Int = 0,
     val title: String,
     val desc: String,

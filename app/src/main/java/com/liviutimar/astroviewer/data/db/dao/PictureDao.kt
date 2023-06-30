@@ -4,19 +4,19 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.liviutimar.astroviewer.data.db.models.AstronomyPictureEntity
+import com.liviutimar.astroviewer.data.db.entities.PictureEntity
 
 @Dao
-interface AstronomyPictureDao {
+interface PictureDao {
 
     @Query("SELECT * FROM Pictures LIMIT :count")
-    suspend fun get(count: Int): List<AstronomyPictureEntity>
+    suspend fun get(count: Int): List<PictureEntity>
 
     @Query("SELECT * FROM Pictures WHERE id=:id")
-    suspend fun getById(id: Int): AstronomyPictureEntity
+    suspend fun getById(id: Int): PictureEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(pictures: List<AstronomyPictureEntity>)
+    suspend fun insert(pictures: List<PictureEntity>)
 
     @Query("DELETE FROM Pictures")
     suspend fun deleteAll()

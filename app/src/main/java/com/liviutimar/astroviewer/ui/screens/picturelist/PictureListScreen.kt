@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -33,31 +34,26 @@ import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.screens.common.*
 import com.liviutimar.astroviewer.ui.theme.BackgroundSecondary
+import com.liviutimar.astroviewer.ui.theme.NoRippleTheme
 import com.liviutimar.astroviewer.ui.theme.Primary
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureListProvider
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureProvider
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navController: NavController) {
+fun PictureListScreen(viewModel: PictureListViewModel, navController: NavController) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
     if (uiState.error == null) {
-        if (uiState.isDataFirstLoad) {
-            LaunchedEffect(key1 = Unit) { viewModel.getPictureList() }
-        }
-
         Column {
             CustomTopAppBar(
                 title = stringResource(id = R.string.our_universe),
-                onFetchClick = {
-                    viewModel.getPictureList(refresh = true)
-                },
+                onFetchClick = { viewModel.getPictureList(refresh = true) },
                 onSortClick = { showSortPicturesDialog = true }
             )
 
-            if (uiState.isLoadingPictures) {
+            if (uiState.isLoading) {
                 Shimmer { ShimmerPictureList(brush = this) }
             } else {
                 PictureList(
@@ -72,7 +68,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
         }
 
         if (showSortPicturesDialog) {
-            var selectedSortOption by rememberSaveable { mutableStateOf(uiState.picturesSortedBy) }
+            var selectedSortOption by remember { mutableStateOf(uiState.sortBy) }
 
             SortPicturesDialog(
                 sortBy = selectedSortOption,
@@ -97,7 +93,7 @@ fun AstronomyPictureListScreen(viewModel: AstronomyPictureListViewModel, navCont
 
         Error(
             errorType = errorType,
-            onTryAgain = { viewModel.getPictureList() }
+            onTryAgain = { viewModel.getPictureList(refresh = true) }
         )
     }
 }
@@ -139,7 +135,7 @@ private fun PictureRow(picture: PictureListItemUiState, onClick: (pictureId: Int
 
 @Composable
 private fun PictureImage(url: String) {
-    AstronomyImage(
+    NetworkImage(
         url = url,
         modifier = Modifier
             .size(40.dp)
@@ -257,20 +253,23 @@ private fun DialogOption(label: String, selected: Boolean, onClick: () -> Unit) 
             modifier = Modifier.fillMaxWidth(),
             maxLines = 1
         )
-        RadioButton(
-            selected = selected,
-            modifier = Modifier
-                .size(20.dp)
-                .indication(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ),
-            onClick = onClick,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = Primary,
-                unselectedColor = Color.White,
+        // Use CompositionLocal to disable the ripple effect for the RadioButton
+        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+            RadioButton(
+                selected = selected,
+                modifier = Modifier
+                    .size(20.dp)
+                    .indication(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ),
+                onClick = onClick,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = Primary,
+                    unselectedColor = Color.White,
+                )
             )
-        )
+        }
     }
 }
 

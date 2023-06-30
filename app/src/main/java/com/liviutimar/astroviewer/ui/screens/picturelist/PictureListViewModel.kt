@@ -3,7 +3,7 @@ package com.liviutimar.astroviewer.ui.screens.picturelist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
-import com.liviutimar.astroviewer.domain.usecases.GetAstronomyPictureListUseCase
+import com.liviutimar.astroviewer.domain.usecases.GetPictureListUseCase
 import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.squareup.moshi.JsonDataException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,25 +15,24 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class AstronomyPictureListViewModel @Inject constructor(
-    private val getAstronomyPictureListUseCase: GetAstronomyPictureListUseCase,
+class PictureListViewModel @Inject constructor(
+    private val getPictureListUseCase: GetPictureListUseCase,
     private val formatDateUseCase: FormatDateUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PictureListUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun getPictureList(refresh: Boolean = true, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
+    init {
+        getPictureList(refresh = true)
+    }
+
+    fun getPictureList(refresh: Boolean, count: Int = PICTURE_COUNT, sortBy: SortBy = SortBy.DATE_DESC) {
         viewModelScope.launch {
-            if (refresh) _uiState.update {
-                it.copy(
-                    isLoadingPictures = true,
-                    error = null
-                )
-            }
+            if (refresh) _uiState.update { it.copy(isLoading = true, error = null) }
 
             try {
-                val pictures = getAstronomyPictureListUseCase(refresh, count, sortBy)
+                val pictures = getPictureListUseCase(refresh, count, sortBy)
 
                 _uiState.update {
                     it.copy(
@@ -45,9 +44,8 @@ class AstronomyPictureListViewModel @Inject constructor(
                                 url = picture.url
                             )
                         },
-                        isDataFirstLoad = false,
-                        isLoadingPictures = false,
-                        picturesSortedBy = sortBy,
+                        isLoading = false,
+                        sortBy = sortBy,
                         error = null
                     )
                 }
@@ -55,14 +53,14 @@ class AstronomyPictureListViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         error = Error(isNetworkError = true),
-                        isLoadingPictures = false
+                        isLoading = false
                     )
                 }
             } catch (e: JsonDataException) {
                 _uiState.update {
                     it.copy(
                         error = Error(isApiError = true),
-                        isLoadingPictures = false
+                        isLoading = false
                     )
                 }
             }
@@ -71,10 +69,9 @@ class AstronomyPictureListViewModel @Inject constructor(
 }
 
 data class PictureListUiState(
-    val isDataFirstLoad: Boolean = true,
-    val isLoadingPictures: Boolean = false,
+    val isLoading: Boolean = false,
     val pictures: List<PictureListItemUiState> = emptyList(),
-    val picturesSortedBy: SortBy = SortBy.DATE_DESC,
+    val sortBy: SortBy = SortBy.DATE_DESC,
     val error: Error? = null
 )
 
