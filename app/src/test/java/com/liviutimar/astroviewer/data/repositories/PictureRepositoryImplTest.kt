@@ -50,9 +50,9 @@ class PictureRepositoryImplTest {
 
         // Then
         verify(mockRemoteDataSource).getPictures(count) // Verify behaviour - method calls with specific arg
-        verify(mockLocalDataSource).deleteAllPictures()
+        verify(mockLocalDataSource).deleteAllPictures(skipFavorites = true)
         verify(mockLocalDataSource).insertPictures(testPictureModelList)
-        verify(mockLocalDataSource).getPictures(count)
+        verify(mockLocalDataSource).getPictures(isFavorite = false)
     }
 
     @Test
@@ -63,16 +63,16 @@ class PictureRepositoryImplTest {
         repository.getPictures(refresh, count)
 
         verify(mockRemoteDataSource, never()).getPictures(anyInt())
-        verify(mockLocalDataSource, never()).deleteAllPictures()
+        verify(mockLocalDataSource, never()).deleteAllPictures(anyBoolean())
         verify(mockLocalDataSource, never()).insertPictures(anyList())
-        verify(mockLocalDataSource).getPictures(count)
+        verify(mockLocalDataSource).getPictures(isFavorite = false)
     }
 
     @Test
     fun getPictures_refreshTrueAndCount_returnsPictureList() = runTest {
         val refresh = true
         val count = 2
-        whenever(mockLocalDataSource.getPictures(anyInt())).thenReturn(testPictureModelList)
+        whenever(mockLocalDataSource.getPictures(isFavorite = false)).thenReturn(testPictureModelList)
 
         // When
         val pictures = repository.getPictures(refresh, count)
@@ -85,7 +85,7 @@ class PictureRepositoryImplTest {
     fun getPictures_refreshFalseAndCount_returnsPictureList() = runTest {
         val refresh = false
         val count = 2
-        whenever(mockLocalDataSource.getPictures(anyInt())).thenReturn(testPictureModelList)
+        whenever(mockLocalDataSource.getPictures(isFavorite = false)).thenReturn(testPictureModelList)
 
         // When
         val pictures = repository.getPictures(refresh, count)

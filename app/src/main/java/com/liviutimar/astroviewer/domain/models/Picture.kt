@@ -8,4 +8,5 @@ data class Picture(
     val desc: String,
     val date: LocalDate,
     val url: String,
+    val isFavorite: Boolean = false,
 )

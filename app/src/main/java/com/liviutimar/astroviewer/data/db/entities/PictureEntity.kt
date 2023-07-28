@@ -13,6 +13,7 @@ data class PictureEntity(
     val desc: String,
     val date: LocalDate,
     val url: String,
+    val isFavorite: Boolean,
 )
 
 fun PictureEntity.asDomainModel() = Picture(
@@ -20,12 +21,14 @@ fun PictureEntity.asDomainModel() = Picture(
     title = title,
     desc = desc,
     date = date,
-    url = url
+    url = url,
+    isFavorite = isFavorite
 )
 
 fun Picture.asEntity() = PictureEntity(
     title = title,
     desc = desc,
     date = date,
-    url = url
+    url = url,
+    isFavorite = isFavorite
 )

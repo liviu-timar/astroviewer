@@ -1,5 +1,7 @@
 package com.liviutimar.astroviewer.ui.screens.picturedetails
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -7,18 +9,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
+import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
+import com.liviutimar.astroviewer.R
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -32,7 +37,12 @@ fun PictureDetailsScreen(
     if (pictureId != 0) LaunchedEffect(key1 = Unit) { viewModel.getPictureDetails(pictureId) }
 
     Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        uiState.details?.let { PictureDetails(details = it) } ?: TextCustom(text = "No data")
+        uiState.details?.let {
+            PictureDetails(
+                details = it,
+                toggleFavoriteFlag = { viewModel.toggleFavoriteFlag(pictureId) }
+            )
+        } ?: TextCustom(text = "No data")
 
         CustomTopAppBar(
             isTransparent = true,
@@ -42,15 +52,25 @@ fun PictureDetailsScreen(
 }
 
 @Composable
-private fun PictureDetails(details: PictureDetails) {
+private fun PictureDetails(details: PictureDetails, toggleFavoriteFlag: () -> Unit) {
     Column {
         Image(url = details.url)
         Column(modifier = Modifier.padding(all = 30.dp)) {
             Title(title = details.title)
             Spacer(modifier = Modifier.height(40.dp))
-            Date(date = details.date)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Date(date = details.date)
+                FavoriteFlag(
+                    isFavorite = details.isFavorite,
+                    toggleFavoriteFlag = toggleFavoriteFlag
+                )
+            }
             Spacer(modifier = Modifier.height(20.dp))
-            Caption(desc = details.desc)
+            Description(desc = details.desc)
         }
     }
 }
@@ -86,7 +106,18 @@ private fun Date(date: String) {
 }
 
 @Composable
-private fun Caption(desc: String) {
+private fun FavoriteFlag(isFavorite: Boolean, toggleFavoriteFlag: () -> Unit) {
+    Image(
+        painter = painterResource(
+            id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite
+        ),
+        contentDescription = null,
+        modifier = Modifier.clickable(onClick = toggleFavoriteFlag)
+    )
+}
+
+@Composable
+private fun Description(desc: String) {
     TextCustom(
         text = desc,
         fontSize = 14.sp,

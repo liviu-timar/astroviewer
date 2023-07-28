@@ -3,6 +3,7 @@ package com.liviutimar.astroviewer.data.repositories
 import com.liviutimar.astroviewer.domain.models.Picture
 import com.liviutimar.astroviewer.domain.repositories.PictureRepository
 import com.liviutimar.astroviewer.domain.sources.PictureLocalDataSource
+import com.liviutimar.astroviewer.domain.sources.PictureLocalDataSource.*
 import com.liviutimar.astroviewer.domain.sources.PictureRemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -20,12 +21,14 @@ class PictureRepositoryImpl @Inject constructor(
     override suspend fun getPictures(refresh: Boolean, count: Int): List<Picture> = withContext(ioDispatcher) {
         if (refresh) {
             val remotePictures = remoteDataSource.getPictures(count)
-            localDataSource.deleteAllPictures()
+            localDataSource.deleteAllPictures(skipFavorites = true)
             localDataSource.insertPictures(remotePictures)
         }
 
-        localDataSource.getPictures(count)
+        localDataSource.getPictures(isFavorite = false)
     }
 
     override suspend fun getPicture(id: Int): Picture = withContext(ioDispatcher) { localDataSource.getPicture(id) }
+
+    override suspend fun toggleFavoriteFlag(id: Int) = withContext(ioDispatcher) { localDataSource.toggleFavoriteFlag(id) }
 }

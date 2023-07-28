@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.liviutimar.astroviewer.data.db.dao.PictureDao
 import com.liviutimar.astroviewer.data.db.entities.PictureEntity
 
-@Database(entities = [PictureEntity::class], version = 2, exportSchema = false)
+@Database(entities = [PictureEntity::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class PictureDatabase : RoomDatabase() {
 
