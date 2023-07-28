@@ -31,22 +31,22 @@ class PictureApiDataSourceTest {
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun getPictures_count_callsService() = runTest {
+    fun get_callsService() = runTest {
         val count = 2
         whenever(mockPlanetaryService.getPictures(anyInt())).thenReturn(Response.success(testPictureDtoList))
 
-        dataSource.getPictures(count)
+        dataSource.get(count)
 
         verify(mockPlanetaryService).getPictures(count)
     }
 
     @Test
-    fun getPictures_pictureDtoList_returnsPictureModelList() = runTest {
+    fun get_pictureDtoList_returnsPictureModelList() = runTest {
         // Given
         whenever(mockPlanetaryService.getPictures(anyInt())).thenReturn(Response.success(testPictureDtoList))
 
         // When
-        val pictures = dataSource.getPictures(2)
+        val pictures = dataSource.get(2)
 
         // Then
         assertThat(pictures, IsEqual(testPictureModelList)) // Verify state - returned data

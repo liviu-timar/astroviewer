@@ -12,17 +12,18 @@ class PictureDbDataSource @Inject constructor(
     private val pictureDao: PictureDao
 ) : PictureLocalDataSource {
 
-    override suspend fun getPictures(isFavorite: Boolean): List<Picture> =
-        pictureDao.get(isFavorite).map(PictureEntity::asDomainModel)
+    override suspend fun getById(id: Int): Picture =
+        pictureDao.getById(id).asDomainModel()
 
-    override suspend fun getPicture(id: Int): Picture =
-        pictureDao.getById(id = id).asDomainModel()
+    override suspend fun getByFavoriteStatus(isFavorite: Boolean): List<Picture> =
+        pictureDao.getByFavoriteStatus(isFavorite).map(PictureEntity::asDomainModel)
 
-    override suspend fun insertPictures(pictures: List<Picture>) =
+    override suspend fun insert(pictures: List<Picture>) =
         pictureDao.insert(pictures.map(Picture::asEntity))
 
-    override suspend fun deleteAllPictures(skipFavorites: Boolean) =
-        pictureDao.deleteAll(skipFavorites = skipFavorites)
+    override suspend fun deleteByFavoriteStatus(isFavorite: Boolean) =
+        pictureDao.deleteByFavoriteStatus(isFavorite)
 
-    override suspend fun toggleFavoriteFlag(id: Int) = pictureDao.toggleFavoriteFlag(id)
+    override suspend fun toggleFavoriteStatus(pictureId: Int) =
+        pictureDao.toggleFavoriteStatus(pictureId)
 }

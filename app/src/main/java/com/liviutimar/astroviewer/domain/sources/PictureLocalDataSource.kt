@@ -4,13 +4,13 @@ import com.liviutimar.astroviewer.domain.models.Picture
 
 interface PictureLocalDataSource {
 
-    suspend fun getPictures(isFavorite: Boolean): List<Picture>
+    suspend fun getById(id: Int): Picture
 
-    suspend fun getPicture(id: Int): Picture
+    suspend fun getByFavoriteStatus(isFavorite: Boolean): List<Picture>
 
-    suspend fun insertPictures(pictures: List<Picture>)
+    suspend fun insert(pictures: List<Picture>)
 
-    suspend fun deleteAllPictures(skipFavorites: Boolean)
+    suspend fun deleteByFavoriteStatus(isFavorite: Boolean)
 
-    suspend fun toggleFavoriteFlag(id: Int)
+    suspend fun toggleFavoriteStatus(pictureId: Int)
 }

@@ -13,7 +13,7 @@ class PlanetaryServiceTest {
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun testResponseCode() = runTest {
+    fun getPictures_successfulRequest() = runTest {
         val response = PlanetaryService.instance.getPictures()
         assert(response.isSuccessful)
     }

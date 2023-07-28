@@ -39,75 +39,75 @@ class PictureRepositoryImplTest {
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun getPictures_refreshTrueAndCount_getsFromRemoteAndWritesToLocal() = runTest { // Takes scheduler from Main
+    fun get_refreshTrueAndCount_getsFromRemoteAndWritesToLocal() = runTest { // Takes scheduler from Main
         // Given
         val refresh = true
         val count = 2
-        whenever(mockRemoteDataSource.getPictures(anyInt())).thenReturn(testPictureModelList)
+        whenever(mockRemoteDataSource.get(anyInt())).thenReturn(testPictureModelList)
 
         // When
-        repository.getPictures(refresh, count)
+        repository.get(refresh, count)
 
         // Then
-        verify(mockRemoteDataSource).getPictures(count) // Verify behaviour - method calls with specific arg
-        verify(mockLocalDataSource).deleteAllPictures(skipFavorites = true)
-        verify(mockLocalDataSource).insertPictures(testPictureModelList)
-        verify(mockLocalDataSource).getPictures(isFavorite = false)
+        verify(mockRemoteDataSource).get(count) // Verify behaviour - method calls with specific arg
+        verify(mockLocalDataSource).deleteByFavoriteStatus(isFavorite = false)
+        verify(mockLocalDataSource).insert(testPictureModelList)
+        verify(mockLocalDataSource).getByFavoriteStatus(isFavorite = false)
     }
 
     @Test
-    fun getPictures_refreshFalseAndCount_getsOnlyFromLocal() = runTest {
+    fun get_refreshFalseAndCount_getsOnlyFromLocal() = runTest {
         val refresh = false
         val count = 2
 
-        repository.getPictures(refresh, count)
+        repository.get(refresh, count)
 
-        verify(mockRemoteDataSource, never()).getPictures(anyInt())
-        verify(mockLocalDataSource, never()).deleteAllPictures(anyBoolean())
-        verify(mockLocalDataSource, never()).insertPictures(anyList())
-        verify(mockLocalDataSource).getPictures(isFavorite = false)
+        verify(mockRemoteDataSource, never()).get(anyInt())
+        verify(mockLocalDataSource, never()).deleteByFavoriteStatus(anyBoolean())
+        verify(mockLocalDataSource, never()).insert(anyList())
+        verify(mockLocalDataSource).getByFavoriteStatus(isFavorite = false)
     }
 
     @Test
-    fun getPictures_refreshTrueAndCount_returnsPictureList() = runTest {
+    fun get_refreshTrueAndCount_returnsPictureList() = runTest {
         val refresh = true
         val count = 2
-        whenever(mockLocalDataSource.getPictures(isFavorite = false)).thenReturn(testPictureModelList)
+        whenever(mockLocalDataSource.getByFavoriteStatus(isFavorite = false)).thenReturn(testPictureModelList)
 
         // When
-        val pictures = repository.getPictures(refresh, count)
+        val pictures = repository.get(refresh, count)
 
         // Then
         assertThat(pictures, IsEqual(testPictureModelList)) // Verify state - variable value
     }
 
     @Test
-    fun getPictures_refreshFalseAndCount_returnsPictureList() = runTest {
+    fun get_refreshFalseAndCount_returnsPictureList() = runTest {
         val refresh = false
         val count = 2
-        whenever(mockLocalDataSource.getPictures(isFavorite = false)).thenReturn(testPictureModelList)
+        whenever(mockLocalDataSource.getByFavoriteStatus(isFavorite = false)).thenReturn(testPictureModelList)
 
         // When
-        val pictures = repository.getPictures(refresh, count)
+        val pictures = repository.get(refresh, count)
 
         // Then
         assertThat(pictures, IsEqual(testPictureModelList))
     }
 
     @Test
-    fun getPicture_pictureId_getsFromLocalWithSameId() = runTest {
+    fun getById_pictureId_getsFromLocalWithSameId() = runTest {
         val pictureId = 1
 
-        repository.getPicture(pictureId)
+        repository.getById(pictureId)
 
-        verify(mockLocalDataSource).getPicture(pictureId)
+        verify(mockLocalDataSource).getById(pictureId)
     }
 
     @Test
-    fun getPicture_anyId_returnsPicture() = runTest {
-        whenever(mockLocalDataSource.getPicture(anyInt())).thenReturn(testPictureModelList[0])
+    fun getById_anyId_returnsPicture() = runTest {
+        whenever(mockLocalDataSource.getById(anyInt())).thenReturn(testPictureModelList[0])
 
-        val picture = repository.getPicture(anyInt())
+        val picture = repository.getById(anyInt())
 
         assertThat(picture, IsEqual(testPictureModelList[0]))
     }

@@ -3,7 +3,6 @@ package com.liviutimar.astroviewer.data.repositories
 import com.liviutimar.astroviewer.domain.models.Picture
 import com.liviutimar.astroviewer.domain.repositories.PictureRepository
 import com.liviutimar.astroviewer.domain.sources.PictureLocalDataSource
-import com.liviutimar.astroviewer.domain.sources.PictureLocalDataSource.*
 import com.liviutimar.astroviewer.domain.sources.PictureRemoteDataSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -18,17 +17,21 @@ class PictureRepositoryImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) : PictureRepository {
 
-    override suspend fun getPictures(refresh: Boolean, count: Int): List<Picture> = withContext(ioDispatcher) {
+    override suspend fun get(refresh: Boolean, count: Int): List<Picture> = withContext(ioDispatcher) {
         if (refresh) {
-            val remotePictures = remoteDataSource.getPictures(count)
-            localDataSource.deleteAllPictures(skipFavorites = true)
-            localDataSource.insertPictures(remotePictures)
+            val remotePictures = remoteDataSource.get(count)
+            localDataSource.deleteByFavoriteStatus(isFavorite = false)
+            localDataSource.insert(remotePictures)
         }
 
-        localDataSource.getPictures(isFavorite = false)
+        localDataSource.getByFavoriteStatus(isFavorite = false)
     }
 
-    override suspend fun getPicture(id: Int): Picture = withContext(ioDispatcher) { localDataSource.getPicture(id) }
+    override suspend fun getById(id: Int): Picture = withContext(ioDispatcher) {
+        localDataSource.getById(id)
+    }
 
-    override suspend fun toggleFavoriteFlag(id: Int) = withContext(ioDispatcher) { localDataSource.toggleFavoriteFlag(id) }
+    override suspend fun toggleFavoriteStatus(pictureId: Int) = withContext(ioDispatcher) {
+        localDataSource.toggleFavoriteStatus(pictureId)
+    }
 }

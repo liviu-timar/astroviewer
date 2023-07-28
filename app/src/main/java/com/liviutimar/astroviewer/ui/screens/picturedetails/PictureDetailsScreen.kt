@@ -40,7 +40,7 @@ fun PictureDetailsScreen(
         uiState.details?.let {
             PictureDetails(
                 details = it,
-                toggleFavoriteFlag = { viewModel.toggleFavoriteFlag(pictureId) }
+                toggleFavoriteStatus = { viewModel.toggleFavoriteStatus(pictureId) }
             )
         } ?: TextCustom(text = "No data")
 
@@ -52,7 +52,7 @@ fun PictureDetailsScreen(
 }
 
 @Composable
-private fun PictureDetails(details: PictureDetails, toggleFavoriteFlag: () -> Unit) {
+private fun PictureDetails(details: PictureDetails, toggleFavoriteStatus: () -> Unit) {
     Column {
         Image(url = details.url)
         Column(modifier = Modifier.padding(all = 30.dp)) {
@@ -64,9 +64,9 @@ private fun PictureDetails(details: PictureDetails, toggleFavoriteFlag: () -> Un
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Date(date = details.date)
-                FavoriteFlag(
+                FavoriteStatus(
                     isFavorite = details.isFavorite,
-                    toggleFavoriteFlag = toggleFavoriteFlag
+                    toggleFavoriteStatus = toggleFavoriteStatus
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -106,13 +106,13 @@ private fun Date(date: String) {
 }
 
 @Composable
-private fun FavoriteFlag(isFavorite: Boolean, toggleFavoriteFlag: () -> Unit) {
+private fun FavoriteStatus(isFavorite: Boolean, toggleFavoriteStatus: () -> Unit) {
     Image(
         painter = painterResource(
             id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite
         ),
         contentDescription = null,
-        modifier = Modifier.clickable(onClick = toggleFavoriteFlag)
+        modifier = Modifier.clickable(onClick = toggleFavoriteStatus)
     )
 }
 

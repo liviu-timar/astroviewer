@@ -4,9 +4,9 @@ import com.liviutimar.astroviewer.domain.models.Picture
 
 interface PictureRepository {
 
-    suspend fun getPictures(refresh: Boolean, count: Int): List<Picture>
+    suspend fun get(refresh: Boolean, count: Int): List<Picture>
 
-    suspend fun getPicture(id: Int): Picture
+    suspend fun getById(id: Int): Picture
 
-    suspend fun toggleFavoriteFlag(id: Int)
+    suspend fun toggleFavoriteStatus(pictureId: Int)
 }

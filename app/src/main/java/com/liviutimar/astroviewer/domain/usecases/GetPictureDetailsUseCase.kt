@@ -9,5 +9,5 @@ class GetPictureDetailsUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(pictureId: Int): Picture =
-        pictureRepository.getPicture(id = pictureId)
+        pictureRepository.getById(id = pictureId)
 }

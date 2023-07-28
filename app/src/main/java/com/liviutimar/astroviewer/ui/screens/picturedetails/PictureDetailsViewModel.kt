@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
 import com.liviutimar.astroviewer.domain.usecases.GetPictureDetailsUseCase
-import com.liviutimar.astroviewer.domain.usecases.TogglePictureFavoriteFlagUseCase
+import com.liviutimar.astroviewer.domain.usecases.TogglePictureFavoriteStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class PictureDetailsViewModel @Inject constructor(
     private val getPictureDetailsUseCase: GetPictureDetailsUseCase,
     private val formatDateUseCase: FormatDateUseCase,
-    private val toggleFavoriteFlagUseCase: TogglePictureFavoriteFlagUseCase
+    private val togglePictureFavoriteStatusUseCase: TogglePictureFavoriteStatusUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PictureDetailsUiState())
@@ -37,9 +37,9 @@ class PictureDetailsViewModel @Inject constructor(
         }
     }
 
-    fun toggleFavoriteFlag(id: Int) = viewModelScope.launch {
-        toggleFavoriteFlagUseCase(id)
-        getPictureDetails(id) // Data request will be replaced by observing Room flow
+    fun toggleFavoriteStatus(pictureId: Int) = viewModelScope.launch {
+        togglePictureFavoriteStatusUseCase(pictureId)
+        getPictureDetails(pictureId) // Data request will be replaced by observing Room flow
     }
 }
 

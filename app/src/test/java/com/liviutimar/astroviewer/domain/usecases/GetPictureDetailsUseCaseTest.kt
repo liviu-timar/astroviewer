@@ -32,12 +32,12 @@ class GetPictureDetailsUseCaseTest {
 
         useCase(pictureId)
 
-        verify(mockPictureRepository).getPicture(pictureId)
+        verify(mockPictureRepository).getById(pictureId)
     }
 
     @Test
     fun invoke_anyId_returnsPicture() = runTest {
-        whenever(mockPictureRepository.getPicture(anyInt())).thenReturn(testPictureModelList[0])
+        whenever(mockPictureRepository.getById(anyInt())).thenReturn(testPictureModelList[0])
 
         val picture = useCase(anyInt())
 
