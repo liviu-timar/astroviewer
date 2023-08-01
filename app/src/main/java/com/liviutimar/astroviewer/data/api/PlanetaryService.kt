@@ -1,7 +1,6 @@
 package com.liviutimar.astroviewer.data.api
 
 import com.liviutimar.astroviewer.BuildConfig
-import com.liviutimar.astroviewer.data.api.adapters.DayAdapter
 import com.liviutimar.astroviewer.data.api.dto.PictureDto
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -23,7 +22,6 @@ interface PlanetaryService {
 
         private val moshi: Moshi = Moshi
             .Builder()
-            .add(DayAdapter())
             .add(KotlinJsonAdapterFactory())
             .build()
 

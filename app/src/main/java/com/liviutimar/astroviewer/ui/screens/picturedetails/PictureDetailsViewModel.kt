@@ -2,7 +2,6 @@ package com.liviutimar.astroviewer.ui.screens.picturedetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
 import com.liviutimar.astroviewer.domain.usecases.GetPictureDetailsUseCase
 import com.liviutimar.astroviewer.domain.usecases.TogglePictureFavoriteStatusUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class PictureDetailsViewModel @Inject constructor(
     private val getPictureDetailsUseCase: GetPictureDetailsUseCase,
-    private val formatDateUseCase: FormatDateUseCase,
     private val togglePictureFavoriteStatusUseCase: TogglePictureFavoriteStatusUseCase
 ) : ViewModel() {
 
@@ -25,13 +23,11 @@ class PictureDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             getPictureDetailsUseCase(pictureId).let {
                 _uiState.value = PictureDetailsUiState(
-                    details = PictureDetails(
-                        title = it.title,
-                        desc = it.desc,
-                        date = formatDateUseCase(it.date),
-                        url = it.url,
-                        isFavorite = it.isFavorite,
-                    )
+                    title = it.title,
+                    desc = it.desc,
+                    date = it.date,
+                    url = it.url,
+                    isFavorite = it.isFavorite
                 )
             }
         }
@@ -44,13 +40,9 @@ class PictureDetailsViewModel @Inject constructor(
 }
 
 data class PictureDetailsUiState(
-    val details: PictureDetails? = null,
-)
-
-data class PictureDetails(
-    val title: String,
-    val desc: String,
-    val date: String, // Formatted Date (string)
-    val url: String,
-    val isFavorite: Boolean,
+    val title: String = "",
+    val desc: String = "",
+    val date: String = "",
+    val url: String = "",
+    val isFavorite: Boolean = false,
 )

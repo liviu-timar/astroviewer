@@ -2,7 +2,7 @@ package com.liviutimar.astroviewer.ui.screens.picturelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
+import com.liviutimar.astroviewer.domain.models.Picture
 import com.liviutimar.astroviewer.domain.usecases.GetPictureListUseCase
 import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.squareup.moshi.JsonDataException
@@ -16,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PictureListViewModel @Inject constructor(
-    private val getPictureListUseCase: GetPictureListUseCase,
-    private val formatDateUseCase: FormatDateUseCase
+    private val getPictureListUseCase: GetPictureListUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PictureListUiState())
@@ -36,14 +35,7 @@ class PictureListViewModel @Inject constructor(
 
                 _uiState.update {
                     it.copy(
-                        pictures = pictures.map { picture ->
-                            PictureListItemUiState(
-                                id = picture.id,
-                                title = picture.title,
-                                date = formatDateUseCase(picture.date),
-                                url = picture.url
-                            )
-                        },
+                        pictures = pictures,
                         isLoading = false,
                         sortBy = sortBy,
                         error = null
@@ -70,16 +62,9 @@ class PictureListViewModel @Inject constructor(
 
 data class PictureListUiState(
     val isLoading: Boolean = false,
-    val pictures: List<PictureListItemUiState> = emptyList(),
+    val pictures: List<Picture> = emptyList(),
     val sortBy: SortBy = SortBy.DATE_DESC,
     val error: Error? = null
-)
-
-data class PictureListItemUiState(
-    val id: Int,
-    val title: String,
-    val date: String, // Formatted Date (string)
-    val url: String
 )
 
 data class Error(

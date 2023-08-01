@@ -24,6 +24,7 @@ import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
 import com.liviutimar.astroviewer.R
+import com.liviutimar.astroviewer.domain.models.Picture
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -37,12 +38,16 @@ fun PictureDetailsScreen(
     if (pictureId != 0) LaunchedEffect(key1 = Unit) { viewModel.getPictureDetails(pictureId) }
 
     Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        uiState.details?.let {
+        with(uiState) {
             PictureDetails(
-                details = it,
+                title = title,
+                desc = desc,
+                date = date,
+                url = url,
+                isFavorite = isFavorite,
                 toggleFavoriteStatus = { viewModel.toggleFavoriteStatus(pictureId) }
             )
-        } ?: TextCustom(text = "No data")
+        }
 
         CustomTopAppBar(
             isTransparent = true,
@@ -52,25 +57,32 @@ fun PictureDetailsScreen(
 }
 
 @Composable
-private fun PictureDetails(details: PictureDetails, toggleFavoriteStatus: () -> Unit) {
+private fun PictureDetails(
+    title: String,
+    desc: String,
+    date: String,
+    url: String,
+    isFavorite: Boolean,
+    toggleFavoriteStatus: () -> Unit,
+) {
     Column {
-        Image(url = details.url)
+        Image(url = url)
         Column(modifier = Modifier.padding(all = 30.dp)) {
-            Title(title = details.title)
+            Title(title = title)
             Spacer(modifier = Modifier.height(40.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Date(date = details.date)
+                Date(date = date)
                 FavoriteStatus(
-                    isFavorite = details.isFavorite,
+                    isFavorite = isFavorite,
                     toggleFavoriteStatus = toggleFavoriteStatus
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Description(desc = details.desc)
+            Description(desc = desc)
         }
     }
 }

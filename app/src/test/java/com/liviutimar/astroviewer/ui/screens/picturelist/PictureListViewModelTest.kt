@@ -1,6 +1,5 @@
 package com.liviutimar.astroviewer.ui.screens.picturelist
 
-import com.liviutimar.astroviewer.domain.usecases.FormatDateUseCase
 import com.liviutimar.astroviewer.domain.usecases.GetPictureListUseCase
 import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.liviutimar.astroviewer.utils.*
@@ -26,28 +25,25 @@ class PictureListViewModelTest {
 
     private lateinit var viewModel: PictureListViewModel
     private lateinit var mockGetPictureListUseCase: GetPictureListUseCase
-    private lateinit var mockFormatDateUseCase: FormatDateUseCase
 
     @Before
     fun setUp() {
         mockGetPictureListUseCase = mock()
-        mockFormatDateUseCase = mock()
-        viewModel = PictureListViewModel(mockGetPictureListUseCase, mockFormatDateUseCase)
+        viewModel = PictureListViewModel(mockGetPictureListUseCase)
     }
 
     // Test method naming: subjectUnderTest_input_expectedResult
     @Test
-    fun picturesFlow_pictureModelList_returnsPictureListItems() = runTest {
+    fun uiState_pictureModelList_containsSamePictureModelList() = runTest {
         // Given
         whenever(mockGetPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
-        whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         // When
         viewModel.getPictureList(refresh = true)
         val pictures = viewModel.uiState.value.pictures
 
         // Then
-        assertThat(pictures, IsEqual(testPictureListItems)) // Verify state - variable value
+        assertThat(pictures, IsEqual(testPictureModelList)) // Verify state - variable value
     }
 
     @Test
@@ -56,7 +52,6 @@ class PictureListViewModelTest {
         val count = 2
         val sortBy = SortBy.TITLE_ASC
         whenever(mockGetPictureListUseCase.invoke(any(), any(), any())).thenReturn(testPictureModelList)
-        whenever(mockFormatDateUseCase.invoke(any())).thenReturn(testDate)
 
         viewModel.getPictureList(refresh, count, sortBy)
 

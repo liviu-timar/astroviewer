@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
+import com.liviutimar.astroviewer.domain.models.Picture
 import com.liviutimar.astroviewer.domain.usecases.SortBy
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.screens.common.*
@@ -99,7 +100,7 @@ fun PictureListScreen(viewModel: PictureListViewModel, navController: NavControl
 }
 
 @Composable
-private fun PictureList(pictures: List<PictureListItemUiState>, onRowClick: (pictureId: Int) -> Unit) {
+private fun PictureList(pictures: List<Picture>, onRowClick: (pictureId: Int) -> Unit) {
     if (pictures.isNotEmpty()) {
         LazyColumn(
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
@@ -116,7 +117,7 @@ private fun PictureList(pictures: List<PictureListItemUiState>, onRowClick: (pic
 }
 
 @Composable
-private fun PictureRow(picture: PictureListItemUiState, onClick: (pictureId: Int) -> Unit) {
+private fun PictureRow(picture: Picture, onClick: (pictureId: Int) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -330,13 +331,13 @@ enum class ErrorType {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: PictureListItemUiState) {
+fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: Picture) {
     PictureRow(picture = picture, onClick = {})
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<PictureListItemUiState>) {
+fun PreviewPictureList(@PreviewParameter(PreviewPictureListProvider::class) pictureList: List<Picture>) {
     PictureList(pictures = pictureList, onRowClick = {})
 }
 

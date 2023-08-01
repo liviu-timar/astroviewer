@@ -3,7 +3,6 @@ package com.liviutimar.astroviewer.data.db.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.liviutimar.astroviewer.domain.models.Picture
-import java.time.LocalDate
 
 @Entity(tableName = "Pictures")
 data class PictureEntity(
@@ -11,7 +10,7 @@ data class PictureEntity(
     val id: Int = 0, // Dummy value. Will be replaced by Room when inserting into the db
     val title: String,
     val desc: String,
-    val date: LocalDate,
+    val date: String,
     val url: String,
     val isFavorite: Boolean,
 )
