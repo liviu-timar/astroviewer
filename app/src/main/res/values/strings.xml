@@ -12,4 +12,6 @@
     <string name="api_error">Something went wrong</string>
     <string name="try_again_later">Please try again later.</string>
     <string name="try_again">Try Again</string>
+    <string name="home">Home</string>
+    <string name="favorites">Favorites</string>
 </resources>

@@ -8,9 +8,13 @@ import androidx.navigation.navigation
 import com.liviutimar.astroviewer.ui.screens.picturedetails.PictureDetailsScreen
 import com.liviutimar.astroviewer.ui.screens.picturelist.PictureListScreen
 
-fun NavGraphBuilder.pictureNavGraph(navController: NavController) {
+fun NavGraphBuilder.pictureNavGraph(
+    navController: NavController,
+    setupAppBars: (isTopBarVisible: Boolean, isBottomBarVisible: Boolean) -> Unit
+) {
     navigation(startDestination = PictureRoutes.PictureList.ROUTE, route = PictureRoutes.ROOT) {
         composable(PictureRoutes.PictureList.ROUTE) {
+            setupAppBars(true, true)
             PictureListScreen(
                 viewModel = hiltViewModel(),
                 navController = navController
@@ -18,6 +22,7 @@ fun NavGraphBuilder.pictureNavGraph(navController: NavController) {
         }
 
         composable(PictureRoutes.PictureDetails.ROUTE) { backStackEntry ->
+            setupAppBars(true, false)
             backStackEntry.arguments.let { args ->
                 val pictureId = args?.getString(PictureRoutes.PictureDetails.PARAM_PICTURE_ID)
 
@@ -46,5 +51,9 @@ object PictureRoutes {
         const val ROUTE = "$BASE_ROUTE/{$PARAM_PICTURE_ID}"
 
         fun createRouteWithArgs(pictureId: Int) = "$BASE_ROUTE/$pictureId"
+    }
+
+    object FavoritePictures {
+        const val ROUTE = "$ROOT/favorites"
     }
 }
