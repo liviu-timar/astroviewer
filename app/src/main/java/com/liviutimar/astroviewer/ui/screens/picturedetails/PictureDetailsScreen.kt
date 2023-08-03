@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
+import com.liviutimar.astroviewer.ui.screens.common.FullscreenMessage
 import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
@@ -34,23 +35,31 @@ fun PictureDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (pictureId != 0) LaunchedEffect(key1 = Unit) { viewModel.getPictureDetails(pictureId) }
+    if (pictureId != 0) {
+        LaunchedEffect(key1 = Unit) { viewModel.getPictureDetails(pictureId) }
 
-    Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        with(uiState) {
-            PictureDetails(
-                title = title,
-                desc = desc,
-                date = date,
-                url = url,
-                isFavorite = isFavorite,
-                toggleFavoriteStatus = { viewModel.toggleFavoriteStatus(pictureId) }
+        Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            with(uiState) {
+                PictureDetails(
+                    title = title,
+                    desc = desc,
+                    date = date,
+                    url = url,
+                    isFavorite = isFavorite,
+                    toggleFavoriteStatus = { viewModel.toggleFavoriteStatus(pictureId) }
+                )
+            }
+
+            CustomTopAppBar(
+                isTransparent = true,
+                onBackClick = { navController.popBackStack() }
             )
         }
-
-        CustomTopAppBar(
-            isTransparent = true,
-            onBackClick = { navController.popBackStack() }
+    } else {
+        FullscreenMessage(
+            icon = R.drawable.ic_error,
+            firstLine = R.string.cannot_display_picture,
+            secondLine = R.string.select_another_picture,
         )
     }
 }

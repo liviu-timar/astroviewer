@@ -12,7 +12,10 @@
     <string name="api_error">Something went wrong</string>
     <string name="try_again_later">Please try again later.</string>
     <string name="try_again">Try Again</string>
+    <string name="no_favorites">No favorite pictures yet</string>
+    <string name="mark_pictures_as_favorites">Mark pictures as favorites to view them offline.</string>
+    <string name="cannot_display_picture">Cannot display picture</string>
+    <string name="select_another_picture">Select another picture from the list.</string>
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
-    <string name="no_favorites">No favorite pictures yet</string>
 </resources>

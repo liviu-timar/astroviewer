@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
+import com.liviutimar.astroviewer.ui.screens.common.FullscreenMessage
 import com.liviutimar.astroviewer.ui.screens.common.PictureList
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
 
@@ -40,20 +41,11 @@ fun FavoritePicturesScreen(viewModel: FavoritePicturesViewModel, navController: 
                 }
             )
         } else {
-            NoFavorites()
+            FullscreenMessage(
+                icon = R.drawable.ic_favorite,
+                firstLine = R.string.no_favorites,
+                secondLine = R.string.mark_pictures_as_favorites
+            )
         }
-    }
-}
-
-@Composable
-private fun NoFavorites() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        TextCustomMedium(
-            text = stringResource(id = R.string.no_favorites),
-            fontSize = 20.sp
-        )
     }
 }

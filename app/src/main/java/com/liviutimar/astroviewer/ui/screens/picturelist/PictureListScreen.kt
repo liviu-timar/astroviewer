@@ -3,9 +3,6 @@ package com.liviutimar.astroviewer.ui.screens.picturelist
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.RadioButton
 import androidx.compose.material.RadioButtonDefaults
@@ -38,7 +35,6 @@ import com.liviutimar.astroviewer.ui.theme.BackgroundSecondary
 import com.liviutimar.astroviewer.ui.theme.NoRippleTheme
 import com.liviutimar.astroviewer.ui.theme.Primary
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureListProvider
-import com.liviutimar.astroviewer.ui.utils.PreviewPictureProvider
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
@@ -46,8 +42,8 @@ fun PictureListScreen(viewModel: PictureListViewModel, navController: NavControl
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (uiState.error == null) {
-        Column {
+    Column {
+        if (uiState.error == null) {
             CustomTopAppBar(
                 title = stringResource(id = R.string.our_universe),
                 onFetchClick = { viewModel.getPictureList(refresh = true) },
@@ -66,36 +62,40 @@ fun PictureListScreen(viewModel: PictureListViewModel, navController: NavControl
                     }
                 )
             }
-        }
 
-        if (showSortPicturesDialog) {
-            var selectedSortOption by remember { mutableStateOf(uiState.sortBy) }
+            if (showSortPicturesDialog) {
+                var selectedSortOption by remember { mutableStateOf(uiState.sortBy) }
 
-            SortPicturesDialog(
-                sortBy = selectedSortOption,
-                onOptionClick = { clickedOption -> selectedSortOption = clickedOption },
-                onDismissClick = { showSortPicturesDialog = false },
-                onConfirmClick = {
-                    viewModel.getPictureList(
-                        refresh = false,
-                        sortBy = selectedSortOption
-                    )
-                    showSortPicturesDialog = false
-                }
+                SortPicturesDialog(
+                    sortBy = selectedSortOption,
+                    onOptionClick = { clickedOption -> selectedSortOption = clickedOption },
+                    onDismissClick = { showSortPicturesDialog = false },
+                    onConfirmClick = {
+                        viewModel.getPictureList(
+                            refresh = false,
+                            sortBy = selectedSortOption
+                        )
+                        showSortPicturesDialog = false
+                    }
+                )
+            }
+        } else {
+            CustomTopAppBar(title = stringResource(id = R.string.our_universe))
+
+            // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
+            val message = when {
+                uiState.error!!.isNetworkError -> Pair(R.string.no_network_connection, R.string.check_network_connection)
+                uiState.error!!.isApiError -> Pair(R.string.api_error, R.string.try_again_later)
+                else -> Pair(R.string.api_error, R.string.try_again_later)
+            }
+
+            FullscreenMessage(
+                icon = R.drawable.ic_error,
+                firstLine = message.first,
+                secondLine = message.second,
+                onTryAgain = { viewModel.getPictureList(refresh = true) }
             )
         }
-    } else {
-        // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
-        val errorType = when {
-            uiState.error!!.isNetworkError -> ErrorType.NETWORK_ERROR
-            uiState.error!!.isApiError -> ErrorType.API_ERROR
-            else -> ErrorType.API_ERROR // We can also use an Unknown error type
-        }
-
-        Error(
-            errorType = errorType,
-            onTryAgain = { viewModel.getPictureList(refresh = true) }
-        )
     }
 }
 
@@ -215,52 +215,6 @@ private fun DialogButton(isConfirmButton: Boolean, onClick: () -> Unit) {
         label = if (isConfirmButton) stringResource(id = R.string.apply) else stringResource(id = R.string.cancel),
         backgroundColor = if (isConfirmButton) Primary else BackgroundSecondary
     )
-}
-
-@Composable
-private fun Error(errorType: ErrorType, onTryAgain: () -> Unit) {
-    val error = when (errorType) {
-        ErrorType.NETWORK_ERROR -> {
-            Pair(R.string.no_network_connection, R.string.check_network_connection)
-        }
-        ErrorType.API_ERROR -> {
-            Pair(R.string.api_error, R.string.try_again_later)
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = 35.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_vector),
-            contentDescription = null,
-            modifier = Modifier.size(120.dp)
-        )
-        Spacer(modifier = Modifier.height(40.dp))
-        TextCustomMedium(
-            text = stringResource(id = error.first),
-            fontSize = 20.sp
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        TextCustom(
-            text = stringResource(id = error.second),
-            textAlign = TextAlign.Center,
-            lineHeight = 25.sp
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        ButtonCustom(
-            onClick = onTryAgain,
-            label = stringResource(id = R.string.try_again)
-        )
-    }
-}
-
-enum class ErrorType {
-    NETWORK_ERROR, API_ERROR
 }
 
 @Preview(showBackground = true)
