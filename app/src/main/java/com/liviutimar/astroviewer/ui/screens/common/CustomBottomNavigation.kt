@@ -66,5 +66,5 @@ sealed class BottomNavDestination(
     @DrawableRes val iconResourceId: Int
 ) {
     object Home : BottomNavDestination(PictureRoutes.PictureList.ROUTE, R.string.home, R.drawable.ic_dust)
-    object Favorites : BottomNavDestination(PictureRoutes.FavoritePictures.ROUTE, R.string.favorites, R.drawable.ic_favorite)
+    object Favorites : BottomNavDestination(PictureRoutes.FavoritePictures.ROUTE, R.string.favorites, R.drawable.ic_favorite_filled_white)
 }

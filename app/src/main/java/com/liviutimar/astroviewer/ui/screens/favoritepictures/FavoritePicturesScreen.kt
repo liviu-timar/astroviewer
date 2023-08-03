@@ -42,7 +42,7 @@ fun FavoritePicturesScreen(viewModel: FavoritePicturesViewModel, navController: 
             )
         } else {
             FullscreenMessage(
-                icon = R.drawable.ic_favorite,
+                icon = R.drawable.ic_favorite_filled_white,
                 firstLine = R.string.no_favorites,
                 secondLine = R.string.mark_pictures_as_favorites
             )

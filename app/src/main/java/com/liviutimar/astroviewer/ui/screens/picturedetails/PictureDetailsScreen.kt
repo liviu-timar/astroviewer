@@ -129,7 +129,7 @@ private fun Date(date: String) {
 private fun FavoriteStatus(isFavorite: Boolean, toggleFavoriteStatus: () -> Unit) {
     Image(
         painter = painterResource(
-            id = if (isFavorite) R.drawable.ic_favorite_filled else R.drawable.ic_favorite
+            id = if (isFavorite) R.drawable.ic_favorite_filled_red else R.drawable.ic_favorite
         ),
         contentDescription = null,
         modifier = Modifier.clickable(onClick = toggleFavoriteStatus)
