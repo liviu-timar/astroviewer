@@ -47,18 +47,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainComposable() {
     val navController = rememberNavController()
-    var showTopBar by remember { mutableStateOf(true) }
-    var showBottomBar by remember { mutableStateOf(false) }
+    var isBottomBarVisible by remember { mutableStateOf(false) }
 
     Scaffold(
+        // topBar needs to be here as well -> attempt on separate branch
         bottomBar = {
             AnimatedVisibility(
-                visible = showBottomBar,
+                visible = isBottomBarVisible,
                 enter = expandVertically(animationSpec = tween(200)),
                 exit = shrinkVertically(animationSpec = tween(200)),
-            ) {
-                CustomBottomNavigation(navController = navController)
-            }
+            ) { CustomBottomNavigation(navController = navController) }
         }
     ) { padding ->
         NavHost(
@@ -68,10 +66,7 @@ private fun MainComposable() {
         ) {
             pictureNavGraph(
                 navController = navController,
-                setupAppBars = { isTopBarVisible, isBottomBarVisible ->
-                    showTopBar = isTopBarVisible
-                    showBottomBar = isBottomBarVisible
-                }
+                setupBottomBar = { isVisible -> isBottomBarVisible = isVisible }
             )
         }
     }

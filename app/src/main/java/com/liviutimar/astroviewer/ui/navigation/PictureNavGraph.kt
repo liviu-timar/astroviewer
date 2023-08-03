@@ -5,16 +5,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.liviutimar.astroviewer.ui.screens.favoritepictures.FavoritePicturesScreen
 import com.liviutimar.astroviewer.ui.screens.picturedetails.PictureDetailsScreen
 import com.liviutimar.astroviewer.ui.screens.picturelist.PictureListScreen
 
 fun NavGraphBuilder.pictureNavGraph(
     navController: NavController,
-    setupAppBars: (isTopBarVisible: Boolean, isBottomBarVisible: Boolean) -> Unit
+    setupBottomBar: (isVisible: Boolean) -> Unit
 ) {
     navigation(startDestination = PictureRoutes.PictureList.ROUTE, route = PictureRoutes.ROOT) {
         composable(PictureRoutes.PictureList.ROUTE) {
-            setupAppBars(true, true)
+            setupBottomBar(true)
             PictureListScreen(
                 viewModel = hiltViewModel(),
                 navController = navController
@@ -22,7 +23,7 @@ fun NavGraphBuilder.pictureNavGraph(
         }
 
         composable(PictureRoutes.PictureDetails.ROUTE) { backStackEntry ->
-            setupAppBars(true, false)
+            setupBottomBar(false)
             backStackEntry.arguments.let { args ->
                 val pictureId = args?.getString(PictureRoutes.PictureDetails.PARAM_PICTURE_ID)
 
@@ -32,6 +33,14 @@ fun NavGraphBuilder.pictureNavGraph(
                     pictureId = pictureId?.toInt() ?: 0
                 )
             }
+        }
+
+        composable(PictureRoutes.FavoritePictures.ROUTE) {
+            setupBottomBar(true)
+            FavoritePicturesScreen(
+                viewModel = hiltViewModel(),
+                navController = navController
+            )
         }
     }
 }

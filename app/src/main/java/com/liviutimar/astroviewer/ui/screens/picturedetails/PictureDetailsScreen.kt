@@ -19,12 +19,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.liviutimar.astroviewer.R
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
 import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
-import com.liviutimar.astroviewer.R
-import com.liviutimar.astroviewer.domain.models.Picture
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable

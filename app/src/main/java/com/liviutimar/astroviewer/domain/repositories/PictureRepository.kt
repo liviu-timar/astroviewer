@@ -8,5 +8,7 @@ interface PictureRepository {
 
     suspend fun getById(id: Int): Picture
 
+    suspend fun getFavorites(): List<Picture>
+
     suspend fun toggleFavoriteStatus(pictureId: Int)
 }

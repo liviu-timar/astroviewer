@@ -99,72 +99,6 @@ fun PictureListScreen(viewModel: PictureListViewModel, navController: NavControl
     }
 }
 
-@Composable
-private fun PictureList(pictures: List<Picture>, onRowClick: (pictureId: Int) -> Unit) {
-    if (pictures.isNotEmpty()) {
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 25.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            items(pictures) { picture ->
-                PictureRow(
-                    picture = picture,
-                    onClick = { pictureId -> onRowClick(pictureId) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PictureRow(picture: Picture, onClick: (pictureId: Int) -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { onClick(picture.id) }),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        PictureImage(url = picture.url)
-        Spacer(modifier = Modifier.width(15.dp))
-        Column {
-            PictureTitle(title = picture.title)
-            Spacer(modifier = Modifier.height(7.dp))
-            PictureDate(date = picture.date)
-        }
-    }
-}
-
-@Composable
-private fun PictureImage(url: String) {
-    NetworkImage(
-        url = url,
-        modifier = Modifier
-            .size(40.dp)
-            .clip(shape = CircleShape),
-        crossfadeMillis = 200,
-        alpha = 0.8f,
-        error = painterResource(id = R.drawable.ic_warped),
-        fallback = painterResource(id = R.drawable.ic_warped),
-        placeholder = painterResource(id = R.drawable.ic_dust)
-    )
-}
-
-@Composable
-private fun PictureTitle(title: String) {
-    TextCustomMedium(
-        text = title,
-        maxLines = 1
-    )
-}
-
-@Composable
-private fun PictureDate(date: String) {
-    TextCustom(
-        text = date,
-        fontSize = 14.sp
-    )
-}
-
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SortPicturesDialog(
@@ -327,12 +261,6 @@ private fun Error(errorType: ErrorType, onTryAgain: () -> Unit) {
 
 enum class ErrorType {
     NETWORK_ERROR, API_ERROR
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewPictureRow(@PreviewParameter(PreviewPictureProvider::class) picture: Picture) {
-    PictureRow(picture = picture, onClick = {})
 }
 
 @Preview(showBackground = true)

@@ -31,6 +31,10 @@ class PictureRepositoryImpl @Inject constructor(
         localDataSource.getById(id)
     }
 
+    override suspend fun getFavorites() = withContext(ioDispatcher) {
+        localDataSource.getByFavoriteStatus(isFavorite = true)
+    }
+
     override suspend fun toggleFavoriteStatus(pictureId: Int) = withContext(ioDispatcher) {
         localDataSource.toggleFavoriteStatus(pictureId)
     }
