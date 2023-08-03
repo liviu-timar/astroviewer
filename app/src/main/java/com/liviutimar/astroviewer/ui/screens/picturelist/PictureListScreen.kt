@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
 import com.liviutimar.astroviewer.domain.models.Picture
 import com.liviutimar.astroviewer.domain.usecases.SortBy
+import com.liviutimar.astroviewer.ui.AppBar
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.screens.common.*
 import com.liviutimar.astroviewer.ui.theme.BackgroundSecondary
@@ -38,18 +39,25 @@ import com.liviutimar.astroviewer.ui.utils.PreviewPictureListProvider
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun PictureListScreen(viewModel: PictureListViewModel, navController: NavController) {
+fun PictureListScreen(
+    viewModel: PictureListViewModel,
+    navController: NavController,
+    defineTopBar: (AppBar) -> Unit,
+    defineBottomBar: (AppBar) -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var showSortPicturesDialog by rememberSaveable { mutableStateOf(false) }
 
+    defineAppBars(
+        defineTopBar = defineTopBar,
+        defineBottomBar = defineBottomBar,
+        onFetchClick = { viewModel.getPictureList(refresh = true) },
+        onSortClick = { showSortPicturesDialog = true },
+        navController = navController
+    )
+
     Column {
         if (uiState.error == null) {
-            CustomTopAppBar(
-                title = stringResource(id = R.string.our_universe),
-                onFetchClick = { viewModel.getPictureList(refresh = true) },
-                onSortClick = { showSortPicturesDialog = true }
-            )
-
             if (uiState.isLoading) {
                 Shimmer { ShimmerPictureList(brush = this) }
             } else {
@@ -80,8 +88,6 @@ fun PictureListScreen(viewModel: PictureListViewModel, navController: NavControl
                 )
             }
         } else {
-            CustomTopAppBar(title = stringResource(id = R.string.our_universe))
-
             // Could have shown cached pictures, but I'm displaying an error message for illustration purposes.
             val message = when {
                 uiState.error!!.isNetworkError -> Pair(R.string.no_network_connection, R.string.check_network_connection)
@@ -96,6 +102,25 @@ fun PictureListScreen(viewModel: PictureListViewModel, navController: NavControl
                 onTryAgain = { viewModel.getPictureList(refresh = true) }
             )
         }
+    }
+}
+
+private fun defineAppBars(
+    defineTopBar: (AppBar) -> Unit,
+    defineBottomBar: (AppBar) -> Unit,
+    onFetchClick: (() -> Unit)? = null,
+    onSortClick: (() -> Unit)? = null,
+    navController: NavController
+) {
+    defineTopBar {
+        CustomTopAppBar(
+            title = stringResource(id = R.string.our_universe),
+            onFetchClick = onFetchClick,
+            onSortClick = onSortClick
+        )
+    }
+    defineBottomBar {
+        CustomBottomNavigation(navController = navController)
     }
 }
 

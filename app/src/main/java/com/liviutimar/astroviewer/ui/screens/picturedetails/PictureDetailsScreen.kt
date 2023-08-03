@@ -20,6 +20,7 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
+import com.liviutimar.astroviewer.ui.AppBar
 import com.liviutimar.astroviewer.ui.screens.common.CustomTopAppBar
 import com.liviutimar.astroviewer.ui.screens.common.FullscreenMessage
 import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
@@ -32,27 +33,24 @@ fun PictureDetailsScreen(
     viewModel: PictureDetailsViewModel,
     navController: NavController,
     pictureId: Int,
+    defineTopBar: (AppBar) -> Unit,
+    defineBottomBar: (AppBar) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    defineAppBars(defineTopBar, defineBottomBar, navController)
 
     if (pictureId != 0) {
         LaunchedEffect(key1 = Unit) { viewModel.getPictureDetails(pictureId) }
 
-        Box(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            with(uiState) {
-                PictureDetails(
-                    title = title,
-                    desc = desc,
-                    date = date,
-                    url = url,
-                    isFavorite = isFavorite,
-                    toggleFavoriteStatus = { viewModel.toggleFavoriteStatus(pictureId) }
-                )
-            }
-
-            CustomTopAppBar(
-                isTransparent = true,
-                onBackClick = { navController.popBackStack() }
+        with(uiState) {
+            PictureDetails(
+                title = title,
+                desc = desc,
+                date = date,
+                url = url,
+                isFavorite = isFavorite,
+                toggleFavoriteStatus = { viewModel.toggleFavoriteStatus(pictureId) }
             )
         }
     } else {
@@ -64,6 +62,20 @@ fun PictureDetailsScreen(
     }
 }
 
+private fun defineAppBars(
+    defineTopBar: (AppBar) -> Unit,
+    defineBottomBar: (AppBar) -> Unit,
+    navController: NavController,
+) {
+    defineTopBar {
+        CustomTopAppBar(
+            isTransparent = true,
+            onBackClick = { navController.popBackStack() }
+        )
+    }
+    defineBottomBar(null)
+}
+
 @Composable
 private fun PictureDetails(
     title: String,
@@ -73,7 +85,7 @@ private fun PictureDetails(
     isFavorite: Boolean,
     toggleFavoriteStatus: () -> Unit,
 ) {
-    Column {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Image(url = url)
         Column(modifier = Modifier.padding(all = 30.dp)) {
             Title(title = title)

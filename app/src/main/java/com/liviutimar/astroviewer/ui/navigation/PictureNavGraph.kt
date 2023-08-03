@@ -5,41 +5,46 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.liviutimar.astroviewer.ui.AppBar
 import com.liviutimar.astroviewer.ui.screens.favoritepictures.FavoritePicturesScreen
 import com.liviutimar.astroviewer.ui.screens.picturedetails.PictureDetailsScreen
 import com.liviutimar.astroviewer.ui.screens.picturelist.PictureListScreen
 
 fun NavGraphBuilder.pictureNavGraph(
     navController: NavController,
-    setupBottomBar: (isVisible: Boolean) -> Unit
+    defineTopBar: (AppBar) -> Unit,
+    defineBottomBar: (AppBar) -> Unit,
 ) {
     navigation(startDestination = PictureRoutes.PictureList.ROUTE, route = PictureRoutes.ROOT) {
         composable(PictureRoutes.PictureList.ROUTE) {
-            setupBottomBar(true)
             PictureListScreen(
                 viewModel = hiltViewModel(),
-                navController = navController
+                navController = navController,
+                defineTopBar = defineTopBar,
+                defineBottomBar = defineBottomBar
             )
         }
 
         composable(PictureRoutes.PictureDetails.ROUTE) { backStackEntry ->
-            setupBottomBar(false)
             backStackEntry.arguments.let { args ->
                 val pictureId = args?.getString(PictureRoutes.PictureDetails.PARAM_PICTURE_ID)
 
                 PictureDetailsScreen(
                     viewModel = hiltViewModel(),
                     navController = navController,
-                    pictureId = pictureId?.toInt() ?: 0
+                    pictureId = pictureId?.toInt() ?: 0,
+                    defineTopBar = defineTopBar,
+                    defineBottomBar = defineBottomBar
                 )
             }
         }
 
         composable(PictureRoutes.FavoritePictures.ROUTE) {
-            setupBottomBar(true)
             FavoritePicturesScreen(
                 viewModel = hiltViewModel(),
-                navController = navController
+                navController = navController,
+                defineTopBar = defineTopBar,
+                defineBottomBar = defineBottomBar
             )
         }
     }

@@ -3,10 +3,6 @@ package com.liviutimar.astroviewer.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
@@ -22,7 +18,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.navigation.pictureNavGraph
-import com.liviutimar.astroviewer.ui.screens.common.CustomBottomNavigation
 import com.liviutimar.astroviewer.ui.theme.MainTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,17 +42,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun MainComposable() {
     val navController = rememberNavController()
-    var isBottomBarVisible by remember { mutableStateOf(false) }
+    var topBar by remember { mutableStateOf<AppBar>(null) }
+    var bottomBar by remember { mutableStateOf<AppBar>(null) }
 
     Scaffold(
-        // topBar needs to be here as well -> attempt on separate branch
-        bottomBar = {
-            AnimatedVisibility(
-                visible = isBottomBarVisible,
-                enter = expandVertically(animationSpec = tween(200)),
-                exit = shrinkVertically(animationSpec = tween(200)),
-            ) { CustomBottomNavigation(navController = navController) }
-        }
+        topBar = { topBar?.invoke() },
+        bottomBar = { bottomBar?.invoke() },
     ) { padding ->
         NavHost(
             navController = navController,
@@ -66,8 +56,11 @@ private fun MainComposable() {
         ) {
             pictureNavGraph(
                 navController = navController,
-                setupBottomBar = { isVisible -> isBottomBarVisible = isVisible }
+                defineTopBar = { topBar = it },
+                defineBottomBar = { bottomBar = it },
             )
         }
     }
 }
+
+typealias AppBar = (@Composable () -> Unit)?
