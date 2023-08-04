@@ -2,6 +2,7 @@ package com.liviutimar.astroviewer.ui.screens.picturedetails
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -132,7 +133,11 @@ private fun FavoriteStatus(isFavorite: Boolean, toggleFavoriteStatus: () -> Unit
             id = if (isFavorite) R.drawable.ic_favorite_filled_red else R.drawable.ic_favorite
         ),
         contentDescription = null,
-        modifier = Modifier.clickable(onClick = toggleFavoriteStatus)
+        modifier = Modifier.clickable(
+            onClick = toggleFavoriteStatus,
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        )
     )
 }
 
