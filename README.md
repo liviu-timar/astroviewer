@@ -17,12 +17,13 @@ Astroviewer allows you to view pictures that the [NASA Astronomy Picture of the 
 - To do
     - Migrate Details to Flow :white_check_mark:
     - Improve Details UI state management :white_check_mark:
-    - Visual feedback for button clicks (reconsider ripple effect) :white_check_mark:
+    - Visual feedback for button clicks (reconsider global disabling of ripple effect) :white_check_mark:
     - Simplify naming for various types :white_check_mark:
-    - Let users mark pictures as favourite & save favourites locally
+    - Let users mark pictures as favourite & save favourites locally :white_check_mark:
     - Create cool animation for "Mark as Favourite" icon
     - Use streams of data (from Room to UI) instead of one-shot requests where possible (observe data instead of requesting it)
-    - Fixes for various edge cases 
+    - Use common top and bottom bars in Scaffold. Find an elegant way to customize from each screen. WIP on common-app-bars branch. 
+    - Fixes for various edge cases
 
 ### Screens
 | List Screen                                          | Sort Dialog                                          | Details Screen                                          |
