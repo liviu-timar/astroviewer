@@ -43,14 +43,16 @@ fun CustomBottomNavigation(navController: NavController) {
                     },
                     selected = dest.route == currentDestination?.route,
                     onClick = {
-                        navController.navigate(dest.route) {
-                            // Pop up to the start destination of the graph to
-                            // avoid building up a large stack of destinations
-                            // on the back stack as user selects items
-                            popUpTo(navController.graph.findStartDestination().id)
-                            // Avoid multiple copies of the same destination when
-                            // re-selecting the same item
-                            launchSingleTop = true
+                        if (dest.route != currentDestination?.route) {
+                            navController.navigate(dest.route) {
+                                // Pop up to the start destination of the graph to
+                                // avoid building up a large stack of destinations
+                                // on the back stack as user selects items
+                                popUpTo(navController.graph.findStartDestination().id)
+                                // Avoid multiple copies of the same destination when
+                                // re-selecting the same item
+                                launchSingleTop = true
+                            }
                         }
                     },
                     modifier = Modifier.background(color = BackgroundSecondary)
