@@ -14,16 +14,13 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
@@ -36,7 +33,6 @@ import com.liviutimar.astroviewer.ui.theme.NoRippleTheme
 import com.liviutimar.astroviewer.ui.theme.Primary
 import com.liviutimar.astroviewer.ui.utils.PreviewPictureListProvider
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun PictureListScreen(viewModel: PictureListViewModel, navController: NavController) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

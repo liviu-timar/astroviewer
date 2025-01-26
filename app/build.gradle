@@ -13,11 +13,13 @@ if (!file("local.gradle").exists()) {
 apply from: "local.gradle"
 
 android {
-    compileSdkVersion 32
+    namespace "com.liviutimar.astroviewer"
+    compileSdk 35
+
     defaultConfig {
         applicationId "com.liviutimar.astroviewer"
-        minSdkVersion 26
-        targetSdkVersion 32
+        minSdk 26
+        targetSdk 35
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -37,18 +39,19 @@ android {
     kotlin {
         kotlinOptions {
             freeCompilerArgs +="-opt-in=kotlin.RequiresOptIn"
-            jvmTarget = '1.8'
+            jvmTarget = '11'
         }
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion composeCompilerVersion
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     packagingOptions {
         resources {
@@ -85,9 +88,9 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hiltVersion"
     kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewModelVersion"
-    kapt "androidx.hilt:hilt-compiler:$hiltViewModelVersion"
-    implementation "androidx.hilt:hilt-navigation-compose:$hiltNavigationComposeVersion"
+    implementation "androidx.hilt:hilt-navigation:$hiltExtensionsVersion"
+    kapt "androidx.hilt:hilt-compiler:$hiltExtensionsVersion"
+    implementation "androidx.hilt:hilt-navigation-compose:$hiltExtensionsVersion"
 
     implementation "io.coil-kt:coil-compose:$coilVersion"
 

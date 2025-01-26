@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.liviutimar.astroviewer.R
@@ -27,7 +26,6 @@ import com.liviutimar.astroviewer.ui.screens.common.NetworkImage
 import com.liviutimar.astroviewer.ui.screens.common.TextCustom
 import com.liviutimar.astroviewer.ui.screens.common.TextCustomMedium
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun PictureDetailsScreen(
     viewModel: PictureDetailsViewModel,
