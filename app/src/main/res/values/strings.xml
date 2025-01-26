@@ -18,4 +18,7 @@
     <string name="select_another_picture">Select another picture from the list.</string>
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
+    <string name="community">Community</string>
+    <string name="welcome_to_community">Welcome to our Community!</string>
+    <string name="great_things_will_happen">Great things will happen here!</string>
 </resources>

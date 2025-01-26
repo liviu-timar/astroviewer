@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
+import com.liviutimar.astroviewer.ui.navigation.communityNavGraph
 import com.liviutimar.astroviewer.ui.navigation.pictureNavGraph
 import com.liviutimar.astroviewer.ui.screens.common.CustomBottomNavigation
 import com.liviutimar.astroviewer.ui.theme.MainTheme
@@ -65,6 +66,11 @@ private fun MainComposable() {
             modifier = Modifier.padding(padding)
         ) {
             pictureNavGraph(
+                navController = navController,
+                setupBottomBar = { isVisible -> isBottomBarVisible = isVisible }
+            )
+
+            communityNavGraph(
                 navController = navController,
                 setupBottomBar = { isVisible -> isBottomBarVisible = isVisible }
             )

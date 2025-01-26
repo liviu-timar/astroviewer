@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.liviutimar.astroviewer.R
+import com.liviutimar.astroviewer.ui.navigation.CommunityRoutes
 import com.liviutimar.astroviewer.ui.navigation.PictureRoutes
 import com.liviutimar.astroviewer.ui.theme.BackgroundSecondary
 import com.liviutimar.astroviewer.ui.theme.NoRippleTheme
@@ -25,7 +26,8 @@ import com.liviutimar.astroviewer.ui.theme.NoRippleTheme
 fun CustomBottomNavigation(navController: NavController) {
     val destinations = listOf(
         BottomNavDestination.Home,
-        BottomNavDestination.Favorites
+        BottomNavDestination.Favorites,
+        BottomNavDestination.Community,
     )
 
     CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
@@ -69,4 +71,5 @@ sealed class BottomNavDestination(
 ) {
     object Home : BottomNavDestination(PictureRoutes.PictureList.ROUTE, R.string.home, R.drawable.ic_dust)
     object Favorites : BottomNavDestination(PictureRoutes.FavoritePictures.ROUTE, R.string.favorites, R.drawable.ic_favorite_filled_white)
+    object Community : BottomNavDestination(CommunityRoutes.CommunityHome.ROUTE, R.string.community, R.drawable.ic_community_filled_white)
 }
